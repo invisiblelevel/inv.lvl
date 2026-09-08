@@ -1,75 +1,55 @@
-name: Telegram Texture Pipeline
+name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [ main ]
+  # Запуск по расписанию: каждые 6 часов
   schedule:
     - cron: '0 */6 * * *'
+  # Возможность запустить вручную из вкладки Actions
   workflow_dispatch:
 
+# Разрешаем workflow писать в репозиторий и деплоить на Pages
 permissions:
   contents: write
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
+# Одна задача — build
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 1. Клонируем репозиторий
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
+      # 2. Устанавливаем Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      # 3. Устанавливаем зависимости из requirements.txt
       - name: Install dependencies
-        run: pip install telethon python-dotenv
+        run: |
+          pip install -r requirements.txt
 
-      - name: Run parser script
+      # 4. Запускаем твой скрипт (он должен создать/обновить папку public)
+      - name: Run script to update site
+        run: python app.py
         env:
           API_ID: ${{ secrets.API_ID }}
           API_HASH: ${{ secrets.API_HASH }}
-          SESSION_STRING: ${{ secrets.SESSION_STRING }}
           CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
-        run: python app.py
 
-      - name: Commit updated files to repo
+      # 5. Настраиваем Git для коммита (это важно!)
+      - name: Configure Git
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          
-          # Сначала забираем последние изменения
-          git pull origin main --no-rebase || true
-          
-          # Добавляем изменения
-          git add public/ posts.json || true
-          
-          # Проверяем, есть ли изменения для коммита
-          if ! git diff --quiet && ! git diff --staged --quiet; then
-            git commit -m "Auto-update textures from Telegram [skip ci]"
-            git push
-          else
-            echo "No changes to commit"
-          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'public'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # 6. Добавляем изменения, коммитим и пушим
+      - name: Commit and push changes
+        run: |
+          git add public/ || true
+          git diff --staged --quiet || git commit -m "Auto-update site via GitHub Actions"
+          git push
