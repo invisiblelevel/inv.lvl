@@ -23,8 +23,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run script to update site
         run: python app.py
@@ -32,7 +31,6 @@ jobs:
           API_ID: ${{ secrets.API_ID }}
           API_HASH: ${{ secrets.API_HASH }}
           CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
-          SESSION_STRING: ${{ secrets.SESSION_STRING }}
 
       - name: Configure Git
         run: |
@@ -41,7 +39,23 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add public/ posts.json || true
-          git diff --staged --quiet || git commit -m "Auto-update site via GitHub Actions [skip ci]"
-          git pull --rebase origin main || true
-          git push origin main
+          git add public/ || true
+          git diff --staged --quiet || git commit -m "Auto-update site via GitHub Actions"
+          git push
+
+      # ===================== ДОБАВЛЕННЫЕ ШАГИ =====================
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
