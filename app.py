@@ -9,7 +9,6 @@ import math
 api_id = int(os.environ.get('API_ID', 0))
 api_hash = os.environ.get('API_HASH', '')
 session_string = os.environ.get('SESSION_STRING', '')
-bot_token = os.environ.get('BOT_TOKEN', '')  # Добавлен токен бота
 channel_link = os.environ.get('CHANNEL_LINK', '')
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
@@ -20,11 +19,10 @@ DATA_FOLDER = 'public'
 os.makedirs(DATA_FOLDER, exist_ok=True)
 POSTS_JSON = 'posts.json'
 
-# Используем StringSession если он есть, иначе обычную сессию
-if session_string:
-    client = TelegramClient(StringSession(session_string), api_id, api_hash)
-else:
-    client = TelegramClient('session', api_id, api_hash)
+if not session_string:
+    raise ValueError("❌ SESSION_STRING не задан. Добавь секрет SESSION_STRING в настройках репозитория.")
+
+client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 def load_all_posts():
     if os.path.exists(POSTS_JSON):
@@ -255,16 +253,11 @@ def generate_site(all_posts):
 async def main():
     print("🔍 Проверяю канал на новые посты...")
     all_posts = load_all_posts()
-    
-    # Используем токен бота, если он задан
-    if bot_token:
-        print("🤖 Использую бота для авторизации")
-        await client.start(bot_token=bot_token)
-    else:
-        print("👤 Использую обычную сессию (может потребоваться подтверждение)")
-        await client.start()
 
-    async with client:
+    print("👤 Авторизуюсь через StringSession...")
+    await client.start()
+
+    try:
         new_posts = await parse_channel(all_posts)
         if new_posts:
             all_posts.extend(new_posts)
@@ -274,6 +267,9 @@ async def main():
             print("ℹ️ База актуальна, генерация страниц не требуется.")
             if not os.path.exists(os.path.join(DATA_FOLDER, "index.html")):
                 generate_site(all_posts)
+    finally:
+        await client.disconnect()
+        print("🔒 Сессия закрыта")
 
 if __name__ == '__main__':
     asyncio.run(main())
