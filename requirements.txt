@@ -1,0 +1,6 @@
+telethon
+flask
+python-dotenv
+aiohttp
+cryptography
+pycryptodome
