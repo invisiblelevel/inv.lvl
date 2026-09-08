@@ -1,9 +1,9 @@
+import os
+import json
+import asyncio
 from telethon import TelegramClient
 from telethon.sessions import StringSession
-import os
-import asyncio
 import math
-import json
 
 # ===================== ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ =====================
 api_id = int(os.environ.get('API_ID', 0))
@@ -115,9 +115,12 @@ def render_card(post):
     if post.get('hashtags'):
         tags_html = '<div class="tags">' + ' '.join([f'<span class="tag">{tag}</span>' for tag in post['hashtags']]) + '</div>'
 
+    img_tag = f'<img src="{post["photo"]}" alt="{title}">' if post['photo'] else ''
+    card_img = f'<a href="{post["photo"]}" target="_blank" title="Открыть в полном разрешении">{img_tag}</a>' if post['photo'] else ''
+
     return f'''
     <div class="card">
-        <img src="{post['photo']}" alt="{title}">
+        {card_img}
         <div class="info">
             <div class="title">{title}</div>
             {f'<div class="desc">{desc}</div>' if desc else ''}
@@ -167,7 +170,8 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             .gallery {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }}
             .card {{ background: #2a2a2a; border-radius: 8px; overflow: hidden; transition: transform 0.2s; }}
             .card:hover {{ transform: scale(1.02); }}
-            .card img {{ width: 100%; height: 200px; object-fit: cover; display: block; }}
+            .card a img {{ width: 100%; height: 200px; object-fit: cover; display: block; cursor: zoom-in; transition: opacity 0.2s; }}
+            .card a img:hover {{ opacity: 0.85; }}
             .card .info {{ padding: 15px; }}
             .card .info .title {{ font-weight: bold; margin-bottom: 5px; color: #fff; font-size: 1.1em; }}
             .card .info .desc {{ color: #aaa; font-size: 0.9em; white-space: pre-wrap; }}
