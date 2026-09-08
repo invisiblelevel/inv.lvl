@@ -1,39 +1,33 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Запуск по расписанию: каждые 6 часов
   schedule:
     - cron: '0 */6 * * *'
-  # Возможность запустить вручную из вкладки Actions
   workflow_dispatch:
 
-# Разрешаем workflow писать в репозиторий и деплоить на Pages
 permissions:
   contents: write
   pages: write
   id-token: write
 
-# Одна задача — build
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1. Клонируем репозиторий
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Забираем всю историю, чтобы git pull работал корректно
 
-      # 2. Устанавливаем Python
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # 3. Устанавливаем зависимости из requirements.txt
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
 
-      # 4. Запускаем твой скрипт (он должен создать/обновить папку public)
       - name: Run script to update site
         run: python app.py
         env:
@@ -41,15 +35,21 @@ jobs:
           API_HASH: ${{ secrets.API_HASH }}
           CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
 
-      # 5. Настраиваем Git для коммита (это важно!)
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      # 6. Добавляем изменения, коммитим и пушим
       - name: Commit and push changes
         run: |
+          # Подтягиваем последние изменения из удалённого репозитория (rebase, чтобы избежать лишних merge-коммитов)
+          git pull --rebase origin main || true
+
+          # Добавляем изменения
           git add public/ || true
+
+          # Коммитим, если есть что коммитить
           git diff --staged --quiet || git commit -m "Auto-update site via GitHub Actions"
-          git push
+
+          # Пушим (с опцией force-with-lease для безопасности)
+          git push origin main
