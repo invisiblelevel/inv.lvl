@@ -35,21 +35,24 @@ jobs:
           API_HASH: ${{ secrets.API_HASH }}
           CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
 
-      - name: Configure Git
+      - name: Commit and push changes
         run: |
+          # Настраиваем Git
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit and push changes
-        run: |
           # Подтягиваем последние изменения из удалённого репозитория
-          git pull --rebase origin main || true
+          git pull --rebase origin main
 
-          # Добавляем изменения
+          # Добавляем новые файлы
           git add public/ posts.json || true
 
-          # Коммитим, если есть что коммитить
-          git diff --staged --quiet || git commit -m "Auto-update site via GitHub Actions"
+          # Если есть изменения — коммитим
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-update site via GitHub Actions"
+          else
+            echo "No changes to commit"
+          fi
 
-          # Пушим
+          # Пушим изменения
           git push origin main
