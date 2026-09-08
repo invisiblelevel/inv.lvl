@@ -37,6 +37,12 @@ jobs:
           CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
         run: python app.py
 
+      - name: Sync repository before commit
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull origin main --rebase || echo "No rebase needed"
+
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
