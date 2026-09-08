@@ -1,0 +1,38 @@
+name: Telegram Texture Pipeline
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install telethon
+
+      - name: Run parser script
+        env:
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          SESSION_STRING: ${{ secrets.SESSION_STRING }}
+          CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
+        run: python app.py
+
+      - name: Commit and push updated site
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/ posts.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update textures from Telegram [skip ci]" && git push)
