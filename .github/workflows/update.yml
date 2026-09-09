@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -38,6 +38,14 @@ jobs:
           SESSION_STRING: ${{ secrets.SESSION_STRING }}
           CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
         run: python app.py
+
+      - name: Commit updated JSON to keep repo active
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git add posts.json || true
+          git diff --staged --quiet || (git commit -m "Auto-update posts.json [skip ci]" && git push)
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
