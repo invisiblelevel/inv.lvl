@@ -39,13 +39,13 @@ jobs:
           CHANNEL_LINK: ${{ secrets.CHANNEL_LINK }}
         run: python app.py
 
-      - name: Commit updated JSON to keep repo active
+      - name: Commit updated posts and images
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          git add posts.json || true
-          git diff --staged --quiet || (git commit -m "Auto-update posts.json [skip ci]" && git push)
+          git add posts.json public/ || true
+          git diff --staged --quiet || (git commit -m "Auto-update posts and images [skip ci]" && git push)
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
