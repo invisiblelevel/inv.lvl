@@ -1,6 +1,7 @@
 import os
 import json
 import asyncio
+import subprocess
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 import math
@@ -27,7 +28,7 @@ CATEGORY_NAMES_RU = {
     'leather': 'Кожа'
 }
 
-POSTS_PER_PAGE = 32
+POSTS_PER_PAGE = 30
 # ===============================================================
 
 DATA_FOLDER = 'public'
@@ -208,7 +209,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
     modal_info_h = 'About Project' if lang == 'en' else 'Информация о проекте'
     
-    # Загружаем Readme
     readme_filename = 'Readme EN.txt' if lang == 'en' else 'Readme RU.txt'
     readme_text = load_text_file(readme_filename)
 
@@ -219,7 +219,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
     modal_donate_h = 'Support Project' if lang == 'en' else 'Поддержать проект'
     
-    # Загружаем Donate
     donate_file_text = load_text_file('Donate.txt')
     if donate_file_text:
         modal_donate_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + donate_file_text + '</pre>'
@@ -425,6 +424,23 @@ def generate_site(all_posts):
 
     print(f"✅ Сайт успешно пересобран (RU + EN) в папке {DATA_FOLDER}")
 
+def git_commit_and_push():
+    try:
+        print("🔄 Отправляю изменения обратно в репозиторий...")
+        subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True)
+        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
+        subprocess.run(["git", "add", "posts.json", "public/"], check=True)
+        
+        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
+        if status.stdout.strip():
+            subprocess.run(["git", "commit", "-m", "Auto-update posts and site [skip ci]"], check=True)
+            subprocess.run(["git", "push"], check=True)
+            print("✅ Изменения успешно запушены в репозиторий!")
+        else:
+            print("ℹ️ Нет новых изменений для коммита.")
+    except Exception as e:
+        print(f"⚠️ Ошибка при автокоммите в Git: {e}")
+
 async def main():
     print("🔍 Проверяю канал на новые посты...")
     all_posts = load_all_posts()
@@ -438,9 +454,11 @@ async def main():
             all_posts.extend(new_posts)
             save_all_posts(all_posts)
             generate_site(all_posts)
+            git_commit_and_push()
         else:
             print("ℹ️ База актуальна, генерирую страницы со свежими файлами текста...")
             generate_site(all_posts)
+            git_commit_and_push()
     finally:
         await client.disconnect()
         print("🔒 Сессия закрыта")
