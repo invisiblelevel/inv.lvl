@@ -12,7 +12,22 @@ session_string = os.environ.get('SESSION_STRING', '')
 channel_link = os.environ.get('CHANNEL_LINK', '')
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
-POSTS_PER_PAGE = 32
+
+CATEGORY_NAMES_RU = {
+    'terrain': 'Ландшафт',
+    'metal': 'Металл',
+    'wood': 'Дерево',
+    'brick': 'Кирпич',
+    'concrete': 'Бетон',
+    'stone': 'Камень',
+    'tile': 'Плитка',
+    'fabric': 'Ткань',
+    'organic': 'Органика',
+    'plastic': 'Пластик',
+    'leather': 'Кожа'
+}
+
+POSTS_PER_PAGE = 30
 # ===============================================================
 
 DATA_FOLDER = 'public'
@@ -46,11 +61,15 @@ def load_text_file(filename):
     variants = [filename, filename.lower(), filename.replace(' ', ''), filename.replace(' ', '_')]
     for name in variants:
         if os.path.exists(name):
-            try:
-                with open(name, 'r', encoding='utf-8') as f:
-                    return f.read()
-            except Exception:
-                pass
+            for encoding in ['utf-8', 'cp1251', 'latin-1']:
+                try:
+                    with open(name, 'r', encoding=encoding) as f:
+                        text = f.read()
+                        print(f"✅ Успешно прочитан файл: {name} (кодировка: {encoding})")
+                        return text
+                except Exception as e:
+                    print(f"⚠️ Не удалось прочитать {name} в кодировке {encoding}: {e}")
+    print(f"❌ ВНИМАНИЕ: Файл '{filename}' вообще не найден в корне проекта!")
     return None
 
 async def download_photo(message, filename):
@@ -183,7 +202,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     info_desc = 'About the project and archive.' if lang == 'en' else 'О проекте и архиве.'
     info_btn = 'Open' if lang == 'en' else 'Открыть'
 
-    donate_title = 'Donate' if lang == 'en' else 'Donate'
+    donate_title = 'Donate' if lang == 'en' else 'Поддержка'
     donate_desc = 'Support the project.' if lang == 'en' else 'Поддержать проект.'
     donate_btn = 'Details' if lang == 'en' else 'Реквизиты'
 
@@ -275,7 +294,8 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
     for cat in category_posts.keys():
         cat_filename = f'{cat}{suffix}.html'
-        html += f'<a href="{cat_filename}">{cat.capitalize()}</a>'
+        cat_display = CATEGORY_NAMES_RU.get(cat, cat.capitalize()) if lang == 'ru' else cat.capitalize()
+        html += f'<a href="{cat_filename}">{cat_display}</a>'
 
     html += f'''
             <a href="{other_lang_link}" class="lang-btn">{lang_btn_text}</a>
@@ -380,9 +400,10 @@ def generate_site(all_posts):
 
     for cat, cat_posts in category_posts.items():
         total_pages_cat = math.ceil(len(cat_posts) / POSTS_PER_PAGE)
+        cat_title_ru = CATEGORY_NAMES_RU.get(cat, cat.capitalize())
         for page_num in range(1, total_pages_cat + 1):
             filename = f'{cat}.html' if page_num == 1 else f'{cat}_page{page_num}.html'
-            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat.capitalize(), category_posts, lang='ru')
+            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat_title_ru, category_posts, lang='ru')
             with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
                 f.write(html)
 
@@ -395,9 +416,10 @@ def generate_site(all_posts):
 
     for cat, cat_posts in category_posts.items():
         total_pages_cat = math.ceil(len(cat_posts) / POSTS_PER_PAGE)
+        cat_title_en = cat.capitalize()
         for page_num in range(1, total_pages_cat + 1):
             filename = f'{cat}_en.html' if page_num == 1 else f'{cat}_page{page_num}_en.html'
-            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat.capitalize(), category_posts, lang='en')
+            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat_title_en, category_posts, lang='en')
             with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
                 f.write(html)
 
