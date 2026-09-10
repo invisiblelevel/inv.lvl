@@ -28,7 +28,7 @@ CATEGORY_NAMES_RU = {
     'leather': 'Кожа'
 }
 
-POSTS_PER_PAGE = 30
+POSTS_PER_PAGE = 32
 # ===============================================================
 
 DATA_FOLDER = 'public'
@@ -65,12 +65,9 @@ def load_text_file(filename):
             for encoding in ['utf-8', 'cp1251', 'latin-1']:
                 try:
                     with open(name, 'r', encoding=encoding) as f:
-                        text = f.read()
-                        print(f"✅ Успешно прочитан файл: {name} (кодировка: {encoding})")
-                        return text
-                except Exception as e:
-                    print(f"⚠️ Не удалось прочитать {name} в кодировке {encoding}: {e}")
-    print(f"❌ ВНИМАНИЕ: Файл '{filename}' вообще не найден в корне проекта!")
+                        return f.read()
+                except:
+                    pass
     return None
 
 async def download_photo(message, filename):
@@ -203,7 +200,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     info_desc = 'About the project and archive.' if lang == 'en' else 'О проекте и архиве.'
     info_btn = 'Open' if lang == 'en' else 'Открыть'
 
-    donate_title = 'Donate' if lang == 'en' else 'Поддержка'
+    donate_title = 'Support' if lang == 'en' else 'Поддержка'
     donate_desc = 'Support the project.' if lang == 'en' else 'Поддержать проект.'
     donate_btn = 'Details' if lang == 'en' else 'Реквизиты'
 
@@ -211,7 +208,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     
     readme_filename = 'Readme EN.txt' if lang == 'en' else 'Readme RU.txt'
     readme_text = load_text_file(readme_filename)
-
     if readme_text:
         modal_info_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + readme_text + '</pre>'
     else:
@@ -326,7 +322,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     html += '''
             </div>
 
-            <!-- Правый блок: Donate -->
+            <!-- Правый блок: Поддержка -->
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('donateModal')">
                     <h3>🪙 {donate_title}</h3>
@@ -345,7 +341,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             </div>
         </div>
 
-        <!-- Модальное окно: Donate -->
+        <!-- Модальное окно: Поддержка -->
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
@@ -426,18 +422,18 @@ def generate_site(all_posts):
 
 def git_commit_and_push():
     try:
-        print("🔄 Отправляю изменения обратно в репозиторий...")
+        print("🔄 Отправляю новые картинки и базу обратно в репозиторий...")
         subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True)
         subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
         subprocess.run(["git", "add", "posts.json", "public/"], check=True)
         
         status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
         if status.stdout.strip():
-            subprocess.run(["git", "commit", "-m", "Auto-update posts and site [skip ci]"], check=True)
+            subprocess.run(["git", "commit", "-m", "Auto-update posts and images [skip ci]"], check=True)
             subprocess.run(["git", "push"], check=True)
-            print("✅ Изменения успешно запушены в репозиторий!")
+            print("✅ Файлы успешно закоммичены и запушены в репозиторий!")
         else:
-            print("ℹ️ Нет новых изменений для коммита.")
+            print("ℹ️ Нет новых изменений для коммита в Git.")
     except Exception as e:
         print(f"⚠️ Ошибка при автокоммите в Git: {e}")
 
