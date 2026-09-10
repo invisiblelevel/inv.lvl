@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>All Textures</title>
-        <meta name="keywords" content="PBR, земля, медь, metal, texture, 2, ground, 6, 4, 1, 5, металл, 3, terrain, copper, 8ktextures, pbr textures, 3d assets">
+        <meta name="keywords" content="ground, земля, 6, metal, 3, 8ktextures, медь, металл, 1, 2, 5, copper, terrain, PBR, 4, texture, pbr textures, 3d assets">
         <meta name="description" content="All Textures — бесплатные PBR текстуры и материалы для 3D художников.">
         <style>
             body { font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
@@ -13,7 +13,8 @@
             .sidebar { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; }
             .side-block { background: #2a2a2a; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, background 0.2s; text-align: center; }
             .side-block:hover { background: #333; transform: translateY(-2px); }
-            .side-block h3 { margin-top: 0; color: #fff; font-size: 1.1em; }
+            .side-block h3 { margin-top: 0; color: #fff; font-size: 1.1em; display: flex; align-items: center; justify-content: center; gap: 8px; }
+            .side-block h3 svg { width: 20px; height: 20px; fill: #8ab4f8; }
             .side-block p { color: #aaa; font-size: 0.85em; margin-bottom: 15px; }
             .side-block .btn-link { display: inline-block; background: #4a6fa5; color: #fff; padding: 6px 15px; border-radius: 4px; font-size: 0.85em; }
             .main-content { flex: 1; min-width: 0; max-width: 1100px; }
@@ -38,7 +39,10 @@
             .pagination a:hover { background: #4a6fa5; }
             .pagination span.active { background: #4a6fa5; }
             .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
-            .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }
+            .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.7; font-size: 1rem; }
+            .modal-content h2 { margin-top: 0; margin-bottom: 20px; color: #8ab4f8; }
+            .modal-content .text-body { color: #ddd; }
+            .modal-content .text-body br { line-height: 1.7; }
             .close { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }
             .close:hover { color: #fff; }
             .modal-content code { background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }
@@ -59,7 +63,7 @@
         <div class="site-wrapper">
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('infoModal')">
-                    <h3>ℹ️ Info</h3>
+                    <h3><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> Info</h3>
                     <p>About the project and archive.</p>
                     <span class="btn-link">Open</span>
                 </div>
@@ -232,7 +236,7 @@
             </div>
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('donateModal')">
-                    <h3>🪙 Support</h3>
+                    <h3><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> Support</h3>
                     <p>Support the project.</p>
                     <span class="btn-link">Details</span>
                 </div>
@@ -242,96 +246,14 @@
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
                 <h2>About Project</h2>
-                <div><pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">========================================
-  TEXTURE PACK — README (EN)
-========================================
-
-This pack contains a set of high-quality PBR textures.
-All textures are seamless (tileable) and ready to use
-in game engines and 3D software.
-
-----------------------------------------
-  WHAT&#x27;S INSIDE
-----------------------------------------
-
-Each texture includes the following maps:
-
-  _Albedo      — Base Color / Diffuse
-  _Normal      — Normal map (OpenGL)
-  _Height      — Height map (for parallax / displacement)
-  _AO          — Ambient Occlusion
-  _Metallic    — Metalness
-  _Smoothness  — Smoothness (for Unity)
-  _ORM         — Packed map (R=AO, G=Roughness, B=Metallic)
-
-Resolutions: 8K.
-Format: PNG (lossless).
-
-----------------------------------------
-  IMPORTANT: SMOOTHNESS vs ROUGHNESS
-----------------------------------------
-
-This pack includes a **_Smoothness** map.
-
-  White = smooth / glossy
-  Black = rough / matte
-
-This map is ready to use in Unity (Built-in, URP, HDRP).
-
-IF YOU NEED A _Roughness MAP:
-
-  Blender, Substance Painter, Unreal Engine and some other
-  engines expect a Roughness map, which is the OPPOSITE
-  of Smoothness.
-
-  To get a Roughness map — simply invert the Smoothness map
-  in any image editor:
-
-    GIMP:        Colors → Invert (Ctrl + I)
-    Photoshop:   Image → Adjustments → Invert
-    Krita:       Filters → Adjust → Invert
-
-  Or use the ready-made _ORM map (see below).
-
-----------------------------------------
-  ORM MAP (for Unreal Engine and others)
-----------------------------------------
-
-This pack includes a packed **_ORM.png** map:
-  Red channel   (R) = Ambient Occlusion
-  Green channel (G) = Roughness
-  Blue channel  (B) = Metallic
-
-If your shader supports ORM — plug this map in instead of
-separate AO / Roughness / Metallic maps.
-
-----------------------------------------
-  FOR UNITY
-----------------------------------------
-
-Unity (Standard / URP / HDRP) expects Metallic and Smoothness
-in a SINGLE texture:
-  Red channel (R) = Metallic
-  Alpha channel (A) = Smoothness
-
-If you don&#x27;t have a ready-made packed map — you can build
-one manually in GIMP / Photoshop by putting _Metallic into
-the red channel and _Smoothness into the alpha channel.
-
-Don&#x27;t forget to disable sRGB (Color Texture) in Unity&#x27;s
-texture import settings for all maps except _Albedo. 
-</pre></div>
+                <div class="text-body">========================================<br>TEXTURE PACK — README (EN)<br>========================================<br><br>This pack contains a set of high-quality PBR textures.<br>All textures are seamless (tileable) and ready to use<br>in game engines and 3D software.<br><br>----------------------------------------<br>WHAT&#x27;S INSIDE<br>----------------------------------------<br><br>Each texture includes the following maps:<br><br>_Albedo      — Base Color / Diffuse<br>_Normal      — Normal map (OpenGL)<br>_Height      — Height map (for parallax / displacement)<br>_AO          — Ambient Occlusion<br>_Metallic    — Metalness<br>_Smoothness  — Smoothness (for Unity)<br>_ORM         — Packed map (R=AO, G=Roughness, B=Metallic)<br><br>Resolutions: 8K.<br>Format: PNG (lossless).<br><br>----------------------------------------<br>IMPORTANT: SMOOTHNESS vs ROUGHNESS<br>----------------------------------------<br><br>This pack includes a **_Smoothness** map.<br><br>White = smooth / glossy<br>Black = rough / matte<br><br>This map is ready to use in Unity (Built-in, URP, HDRP).<br><br>IF YOU NEED A _Roughness MAP:<br><br>Blender, Substance Painter, Unreal Engine and some other<br>engines expect a Roughness map, which is the OPPOSITE<br>of Smoothness.<br><br>To get a Roughness map — simply invert the Smoothness map<br>in any image editor:<br><br>GIMP:        Colors → Invert (Ctrl + I)<br>Photoshop:   Image → Adjustments → Invert<br>Krita:       Filters → Adjust → Invert<br><br>Or use the ready-made _ORM map (see below).<br><br>----------------------------------------<br>ORM MAP (for Unreal Engine and others)<br>----------------------------------------<br><br>This pack includes a packed **_ORM.png** map:<br>Red channel   (R) = Ambient Occlusion<br>Green channel (G) = Roughness<br>Blue channel  (B) = Metallic<br><br>If your shader supports ORM — plug this map in instead of<br>separate AO / Roughness / Metallic maps.<br><br>----------------------------------------<br>FOR UNITY<br>----------------------------------------<br><br>Unity (Standard / URP / HDRP) expects Metallic and Smoothness<br>in a SINGLE texture:<br>Red channel (R) = Metallic<br>Alpha channel (A) = Smoothness<br><br>If you don&#x27;t have a ready-made packed map — you can build<br>one manually in GIMP / Photoshop by putting _Metallic into<br>the red channel and _Smoothness into the alpha channel.<br><br>Don&#x27;t forget to disable sRGB (Color Texture) in Unity&#x27;s<br>texture import settings for all maps except _Albedo.<br><br></div>
             </div>
         </div>
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
                 <h2>Support Project</h2>
-                <div><pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">Реквизиты для дон:   
-• BTC: bc1q2ka70s4vtmrskandqj8l4d6n3kdxyxa7kf3wf7
-• USDT (TRC-20): TUjY9p6oxKmeCQwNZwMfHqHdXuabaHpgT7
-• TONx: UQDWumGNNlnITx48WBzyI7Clb5wrpFRlJ3Se7xhfVKY5E2ad
-</pre></div>
+                <div class="text-body">Support the project:<br><br>USDT (TRC20): Your wallet<br>Boosty / DonationAlerts: link<br></div>
             </div>
         </div>
         <script>

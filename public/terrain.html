@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Ландшафт</title>
-        <meta name="keywords" content="PBR, земля, 2, texture, ground, 6, 1, 5, 3, terrain, 4, pbr textures, 3d assets">
+        <meta name="keywords" content="ground, земля, 6, 3, 5, 1, 2, terrain, PBR, 4, texture, pbr textures, 3d assets">
         <meta name="description" content="Ландшафт — бесплатные PBR текстуры и материалы для 3D художников.">
         <style>
             body { font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
@@ -13,7 +13,8 @@
             .sidebar { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; }
             .side-block { background: #2a2a2a; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, background 0.2s; text-align: center; }
             .side-block:hover { background: #333; transform: translateY(-2px); }
-            .side-block h3 { margin-top: 0; color: #fff; font-size: 1.1em; }
+            .side-block h3 { margin-top: 0; color: #fff; font-size: 1.1em; display: flex; align-items: center; justify-content: center; gap: 8px; }
+            .side-block h3 svg { width: 20px; height: 20px; fill: #8ab4f8; }
             .side-block p { color: #aaa; font-size: 0.85em; margin-bottom: 15px; }
             .side-block .btn-link { display: inline-block; background: #4a6fa5; color: #fff; padding: 6px 15px; border-radius: 4px; font-size: 0.85em; }
             .main-content { flex: 1; min-width: 0; max-width: 1100px; }
@@ -38,7 +39,10 @@
             .pagination a:hover { background: #4a6fa5; }
             .pagination span.active { background: #4a6fa5; }
             .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
-            .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }
+            .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.7; font-size: 1rem; }
+            .modal-content h2 { margin-top: 0; margin-bottom: 20px; color: #8ab4f8; }
+            .modal-content .text-body { color: #ddd; }
+            .modal-content .text-body br { line-height: 1.7; }
             .close { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }
             .close:hover { color: #fff; }
             .modal-content code { background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }
@@ -59,7 +63,7 @@
         <div class="site-wrapper">
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('infoModal')">
-                    <h3>ℹ️ Информация</h3>
+                    <h3><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> Информация</h3>
                     <p>О проекте и архиве.</p>
                     <span class="btn-link">Открыть</span>
                 </div>
@@ -132,7 +136,7 @@
             </div>
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('donateModal')">
-                    <h3>🪙 Поддержка</h3>
+                    <h3><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> Поддержка</h3>
                     <p>Поддержать проект.</p>
                     <span class="btn-link">Реквизиты</span>
                 </div>
@@ -142,96 +146,14 @@
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
                 <h2>Информация о проекте</h2>
-                <div><pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">========================================
-  TEXTURE PACK — README
-========================================
-
-Этот пак содержит набор PBR-текстур высокого качества.
-Все текстуры бесшовные (tileable) и готовы к использованию
-в игровых движках и 3D-редакторах.
-
-----------------------------------------
-  ЧТО ВНУТРИ ПАКА
-----------------------------------------
-
-Каждая текстура включает следующие карты:
-
-  _Albedo      — цвет (Base Color / Diffuse)
-  _Normal      — карта нормалей (OpenGL)
-  _Height      — карта высот (для parallax / displacement)
-  _AO          — ambient occlusion (затенение)
-  _Metallic    — металличность
-  _Smoothness  — гладкость (для Unity)
-  _ORM         — упакованная карта (R=AO, G=Roughness, B=Metallic)
-
-Разрешения: 8K.
-Формат: PNG (без потери качества).
-
-----------------------------------------
-  ВАЖНО: SMOOTHNESS vs ROUGHNESS
-----------------------------------------
-
-В паке лежит карта **_Smoothness** (гладкость).
-
-  Белый = гладкий / блестящий
-  Чёрный = шероховатый / матовый
-
-Эта карта подходит для Unity (Built-in, URP, HDRP).
-
-ЕСЛИ ВАМ НУЖНА КАРТА _Roughness (шероховатость):
-
-  В Blender, Substance Painter, Unreal Engine и некоторых
-  других движках используется карта Roughness — это
-  ПРОТИВОПОЛОЖНОСТЬ Smoothness.
-
-  Чтобы получить Roughness — просто инвертируйте карту
-  Smoothness в любом графическом редакторе:
-
-    GIMP:        Цвет → Инвертировать (Ctrl + I)
-    Photoshop:   Изображение → Коррекция → Инвертировать
-    Krita:       Фильтры → Коррекция → Инвертировать
-
-  Или используйте готовую карту _ORM (см. ниже).
-
-----------------------------------------
-  ORM-КАРТА (для Unreal Engine и др.)
-----------------------------------------
-
-В паке есть упакованная карта **_ORM.png**, где:
-  Красный канал  (R) = Ambient Occlusion
-  Зелёный канал  (G) = Roughness
-  Синий канал    (B) = Metallic
-
-Если ваш шейдер поддерживает ORM — просто подставьте
-эту карту вместо отдельных AO / Roughness / Metallic.
-
-----------------------------------------
-  ДЛЯ UNITY
-----------------------------------------
-
-Unity (Standard / URP / HDRP) ожидает Metallic и Smoothness
-в ОДНОЙ карте:
-  Красный канал  (R) = Metallic
-  Альфа-канал    (A) = Smoothness
-
-Если у вас нет готовой упакованной карты — можете собрать
-её вручную в GIMP / Photoshop, положив _Metallic в красный
-канал, а _Smoothness — в альфа-канал.
-
-Не забудьте в настройках текстуры в Unity отключить sRGB
-(Color Texture) для всех карт, кроме _Albedo. 
-</pre></div>
+                <div class="text-body">========================================<br>TEXTURE PACK — README<br>========================================<br><br>Этот пак содержит набор PBR-текстур высокого качества.<br>Все текстуры бесшовные (tileable) и готовы к использованию<br>в игровых движках и 3D-редакторах.<br><br>----------------------------------------<br>ЧТО ВНУТРИ ПАКА<br>----------------------------------------<br><br>Каждая текстура включает следующие карты:<br><br>_Albedo      — цвет (Base Color / Diffuse)<br>_Normal      — карта нормалей (OpenGL)<br>_Height      — карта высот (для parallax / displacement)<br>_AO          — ambient occlusion (затенение)<br>_Metallic    — металличность<br>_Smoothness  — гладкость (для Unity)<br>_ORM         — упакованная карта (R=AO, G=Roughness, B=Metallic)<br><br>Разрешения: 8K.<br>Формат: PNG (без потери качества).<br><br>----------------------------------------<br>ВАЖНО: SMOOTHNESS vs ROUGHNESS<br>----------------------------------------<br><br>В паке лежит карта **_Smoothness** (гладкость).<br><br>Белый = гладкий / блестящий<br>Чёрный = шероховатый / матовый<br><br>Эта карта подходит для Unity (Built-in, URP, HDRP).<br><br>ЕСЛИ ВАМ НУЖНА КАРТА _Roughness (шероховатость):<br><br>В Blender, Substance Painter, Unreal Engine и некоторых<br>других движках используется карта Roughness — это<br>ПРОТИВОПОЛОЖНОСТЬ Smoothness.<br><br>Чтобы получить Roughness — просто инвертируйте карту<br>Smoothness в любом графическом редакторе:<br><br>GIMP:        Цвет → Инвертировать (Ctrl + I)<br>Photoshop:   Изображение → Коррекция → Инвертировать<br>Krita:       Фильтры → Коррекция → Инвертировать<br><br>Или используйте готовую карту _ORM (см. ниже).<br><br>----------------------------------------<br>ORM-КАРТА (для Unreal Engine и др.)<br>----------------------------------------<br><br>В паке есть упакованная карта **_ORM.png**, где:<br>Красный канал  (R) = Ambient Occlusion<br>Зелёный канал  (G) = Roughness<br>Синий канал    (B) = Metallic<br><br>Если ваш шейдер поддерживает ORM — просто подставьте<br>эту карту вместо отдельных AO / Roughness / Metallic.<br><br>----------------------------------------<br>ДЛЯ UNITY<br>----------------------------------------<br><br>Unity (Standard / URP / HDRP) ожидает Metallic и Smoothness<br>в ОДНОЙ карте:<br>Красный канал  (R) = Metallic<br>Альфа-канал    (A) = Smoothness<br><br>Если у вас нет готовой упакованной карты — можете собрать<br>её вручную в GIMP / Photoshop, положив _Metallic в красный<br>канал, а _Smoothness — в альфа-канал.<br><br>Не забудьте в настройках текстуры в Unity отключить sRGB<br>(Color Texture) для всех карт, кроме _Albedo.<br><br></div>
             </div>
         </div>
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
                 <h2>Поддержать проект</h2>
-                <div><pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">Реквизиты для дон:   
-• BTC: bc1q2ka70s4vtmrskandqj8l4d6n3kdxyxa7kf3wf7
-• USDT (TRC-20): TUjY9p6oxKmeCQwNZwMfHqHdXuabaHpgT7
-• TONx: UQDWumGNNlnITx48WBzyI7Clb5wrpFRlJ3Se7xhfVKY5E2ad
-</pre></div>
+                <div class="text-body">Реквизиты для дон:<br>• BTC: bc1q2ka70s4vtmrskandqj8l4d6n3kdxyxa7kf3wf7<br>• USDT (TRC-20): TUjY9p6oxKmeCQwNZwMfHqHdXuabaHpgT7<br>• TONx: UQDWumGNNlnITx48WBzyI7Clb5wrpFRlJ3Se7xhfVKY5E2ad<br><br></div>
             </div>
         </div>
         <script>
