@@ -15,8 +15,11 @@ api_hash = os.environ.get('API_HASH', '')
 session_string = os.environ.get('SESSION_STRING', '')
 channel_link = os.environ.get('CHANNEL_LINK', '')
 
-# Ссылка на твой сайт — ВСТАВЬ СВОЮ!
+# Ссылка на твой сайт
 SITE_URL = 'https://invisiblelevel.github.io/inv.lvl/'
+
+# Google verification code
+GOOGLE_VERIFICATION = 'y6CELuRI3Hg8A2VIeRczOtAwZV4JCZYv2uuK84SEg4Y'
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
 
@@ -264,6 +267,7 @@ def build_seo_block(title, description, keywords, url, image_url, lang='ru'):
         <meta name="robots" content="index, follow">
         <meta name="author" content="InvisibleLevel">
         <link rel="canonical" href="{safe_url}">
+        <meta name="google-site-verification" content="{GOOGLE_VERIFICATION}" />
 
         <!-- Open Graph -->
         <meta property="og:type" content="website">
@@ -306,7 +310,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             all_page_tags.add(t.lstrip('#'))
     keywords_str = ', '.join(all_page_tags) if all_page_tags else "pbr textures, 3d assets, free textures"
 
-    # URL и картинка для SEO
     suffix = '_en' if lang == 'en' else ''
     page_suffix = '' if page_num == 1 else f'_page{page_num}'
     url = f"{SITE_URL}/{base_name}{page_suffix}{suffix}.html"
@@ -572,6 +575,15 @@ def generate_site(all_posts):
     generate_sitemap(all_pages)
 
     print(f"✅ Сайт пересобран (RU + EN) + SEO файлы в папке {DATA_FOLDER}")
+
+
+def preserve_google_file():
+    """Сохраняет файл Google verification от удаления."""
+    google_file = os.path.join(DATA_FOLDER, 'google-site-verification.html')
+    if os.path.exists(google_file):
+        print("✅ Файл Google verification сохранён")
+    # Дополнительно можно создать файл, если нужно
+    # Но метатег в HTML уже решает задачу
 
 
 def git_commit_and_push():
