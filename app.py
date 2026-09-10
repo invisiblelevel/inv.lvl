@@ -42,6 +42,18 @@ def get_last_post_id(posts):
         return 0
     return max(p.get('id', 0) for p in posts)
 
+def load_text_file(filename):
+    # Проверяем точное имя и основные варианты на случай расхождений регистра
+    variants = [filename, filename.lower(), filename.replace(' ', ''), filename.replace(' ', '_')]
+    for name in variants:
+        if os.path.exists(name):
+            try:
+                with open(name, 'r', encoding='utf-8') as f:
+                    return f.read()
+            except Exception:
+                pass
+    return None
+
 async def download_photo(message, filename):
     path = os.path.join(DATA_FOLDER, filename)
     if os.path.exists(path):
@@ -119,7 +131,6 @@ def render_card(post, lang='ru'):
         tags_html = '<div class="tags">' + ' '.join([f'<span class="tag">{tag}</span>' for tag in post['hashtags']]) + '</div>'
 
     img_tag = f'<img src="{post["photo"]}" alt="{title}">' if post['photo'] else ''
-    
     title_attr = "Open in full resolution" if lang == 'en' else "Открыть в полном разрешении"
     card_img = f'<a href="{post["photo"]}" target="_blank" title="{title_attr}">{img_tag}</a>' if post['photo'] else ''
     btn_text = 'Download Archive' if lang == 'en' else 'Скачать архив'
@@ -178,10 +189,24 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     donate_btn = 'Details' if lang == 'en' else 'Реквизиты'
 
     modal_info_h = 'About Project' if lang == 'en' else 'Информация о проекте'
-    modal_info_p = 'Free archive of PBR textures and materials for 3D artists and gamedev.' if lang == 'en' else 'Бесплатный архив PBR-текстур и материалов для 3D-художников и геймдева.'
+    
+    # Читаем Readme RU.txt или Readme EN.txt
+    readme_filename = 'Readme EN.txt' if lang == 'en' else 'Readme RU.txt'
+    readme_text = load_text_file(readme_filename)
+
+    if readme_text:
+        modal_info_p = f'<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">{readme_text}</pre>'
+    else:
+        modal_info_p = 'Free archive of PBR textures.' if lang == 'en' else 'Бесплатный архив PBR-текстур.'
 
     modal_donate_h = 'Support Project' if lang == 'en' else 'Поддержать проект'
-    modal_donate_p = 'If these materials save your time and help in your work, you can support the archive:' if lang == 'en' else 'Если материалы экономят время и помогают в работе, можешь поддержать архив:'
+    
+    # Читаем Donate.txt
+    donate_file_text = load_text_file('Donate.txt')
+    if donate_file_text:
+        modal_donate_p = f'<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">{donate_file_text}</pre>'
+    else:
+        modal_donate_p = 'If these materials help in your work, you can support the archive.' if lang == 'en' else 'Если материалы помогают в работе, можешь поддержать архив.'
 
     home_text = 'Home' if lang == 'en' else 'Главная'
 
@@ -232,7 +257,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
             /* Модальные окна */
             .modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }}
-            .modal-content {{ background: #222; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }}
+            .modal-content {{ background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }}
             .close {{ position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }}
             .close:hover {{ color: #fff; }}
             .modal-content code {{ background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }}
@@ -298,7 +323,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
                 <h2>{modal_info_h}</h2>
-                <p>{modal_info_p}</p>
+                <div>{modal_info_p}</div>
             </div>
         </div>
 
@@ -307,10 +332,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
                 <h2>{modal_donate_h}</h2>
-                <p>{modal_donate_p}</p>
-                <p><b>BTC:</b> <code>сюда_вставишь_свой_btc_кошелек</code></p>
-                <p><b>USDT (TRC-20):</b> <code>сюда_вставишь_свой_usdt_кошелек</code></p>
-                <p><b>ETH:</b> <code>сюда_вставишь_свой_eth_кошелек</code></p>
+                <div>{modal_donate_p}</div>
             </div>
         </div>
 
