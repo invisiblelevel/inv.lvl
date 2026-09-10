@@ -12,7 +12,7 @@ session_string = os.environ.get('SESSION_STRING', '')
 channel_link = os.environ.get('CHANNEL_LINK', '')
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
-POSTS_PER_PAGE = 30
+POSTS_PER_PAGE = 32
 # ===============================================================
 
 DATA_FOLDER = 'public'
