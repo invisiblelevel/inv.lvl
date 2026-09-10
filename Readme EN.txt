@@ -27,10 +27,11 @@ Format: PNG (lossless).
   IMPORTANT: SMOOTHNESS vs ROUGHNESS
 ----------------------------------------
 
-This pack includes a **_Smoothness** map.
+This pack includes a **_Smoothness** map. or **_Roughness**
 
-  White = smooth / glossy
-  Black = rough / matte
+===============================================ATTENTION!==========================================================
+If you experience problems with this map, try inverting the colors.
+===================================================================================================================
 
 This map is ready to use in Unity (Built-in, URP, HDRP).
 
