@@ -5,11 +5,22 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Все текстуры</title>
-        <meta name="keywords" content="3, 8ktextures, 5, terrain, земля, texture, металл, PBR, 2, 4, metal, 6, ground, 1, pbr textures, 3d assets">
+        <meta name="keywords" content="texture, copper, медь, 1, 5, ground, 6, 4, 2, 8ktextures, металл, terrain, PBR, 3, metal, земля, pbr textures, 3d assets">
         <meta name="description" content="Все текстуры — бесплатные PBR текстуры и материалы для 3D художников.">
         <style>
             body { font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
-            .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+            .site-wrapper { display: flex; max-width: 1550px; margin: 0 auto; gap: 20px; align-items: flex-start; justify-content: center; }
+            
+            .sidebar { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; }
+            .side-block { background: #2a2a2a; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, background 0.2s; text-align: center; }
+            .side-block:hover { background: #333; transform: translateY(-2px); }
+            .side-block h3 { margin-top: 0; color: #fff; font-size: 1.1em; }
+            .side-block p { color: #aaa; font-size: 0.85em; margin-bottom: 15px; }
+            .side-block .btn-link { display: inline-block; background: #4a6fa5; color: #fff; padding: 6px 15px; border-radius: 4px; font-size: 0.85em; }
+
+            .main-content { flex: 1; min-width: 0; max-width: 1100px; }
+            
+            .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
             .card { background: #2a2a2a; border-radius: 8px; overflow: hidden; transition: transform 0.2s; }
             .card:hover { transform: scale(1.02); }
             .card a img { width: 100%; height: 200px; object-fit: cover; display: block; cursor: zoom-in; transition: opacity 0.2s; }
@@ -21,22 +32,84 @@
             .card .info .tag { background: #3a3a3a; color: #8ab4f8; font-size: 0.75em; padding: 2px 6px; border-radius: 4px; }
             .card .info .link { display: inline-block; margin-top: 10px; background: #4a6fa5; color: #fff; padding: 5px 15px; border-radius: 4px; text-decoration: none; font-size: 0.9em; }
             .card .info .link:hover { background: #5a7fb5; }
-            .nav { text-align: center; margin-bottom: 30px; }
-            .nav a { color: #4a6fa5; text-decoration: none; margin: 0 10px; }
+            
+            .nav { text-align: center; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }
+            .nav a { color: #4a6fa5; text-decoration: none; margin: 0 5px; }
             .nav a:hover { text-decoration: underline; }
+            .lang-switcher { background: #333; padding: 5px 12px; border-radius: 4px; font-weight: bold; color: #fff !important; border: 1px solid #444; }
+            .lang-switcher:hover { background: #444; text-decoration: none !important; }
+            
             .pagination { text-align: center; margin-top: 30px; }
             .pagination a, .pagination span { display: inline-block; padding: 8px 14px; margin: 0 4px; background: #2a2a2a; border-radius: 4px; color: #fff; text-decoration: none; }
             .pagination a:hover { background: #4a6fa5; }
             .pagination span.active { background: #4a6fa5; }
+
+            /* Модальные окна */
+            .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+            .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 750px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }
+            .close { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }
+            .close:hover { color: #fff; }
+            .readme-box { background: #111; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; color: #ccc; margin-top: 15px; }
+            .modal-content code { background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }
+
+            @media (max-width: 1100px) {
+                .site-wrapper { flex-direction: column; align-items: stretch; }
+                .sidebar { width: 100%; position: static; flex-direction: row; }
+                .side-block { flex: 1; }
+            }
         </style>
     </head>
     <body>
         <div class="nav">
             <a href="index.html">Главная</a>
-    <a href="metal.html">Metal</a><a href="terrain.html">Terrain</a>
+    <a href="metal.html">Металл</a><a href="terrain.html">Ландшафт</a>
+            <a href="en/index.html" class="lang-switcher">🇬🇧 EN</a>
         </div>
         <h1 style="text-align:center; margin-bottom: 30px;">Все текстуры</h1>
-        <div class="gallery">
+        
+        <div class="site-wrapper">
+            <!-- Левый блок: Информация -->
+            <div class="sidebar">
+                <div class="side-block" onclick="openModal('infoModal')">
+                    <h3>ℹ️ Информация</h3>
+                    <p>О проекте, правилах и архиве.</p>
+                    <span class="btn-link">Открыть</span>
+                </div>
+            </div>
+
+            <!-- Центральный блок с текстурами -->
+            <div class="main-content">
+                <div class="gallery">
+    
+    <div class="card">
+        <a href="138_preview.jpg" target="_blank" title="Открыть в полном разрешении"><img src="138_preview.jpg" alt="Copper Patina PBR Texture Pack №3  (8K Resolution, tileable)"></a>
+        <div class="info">
+            <div class="title">Copper Patina PBR Texture Pack №3  (8K Resolution, tileable)</div>
+            
+            <div class="tags"><span class="tag">#metal</span> <span class="tag">#copper</span> <span class="tag">#texture</span> <span class="tag">#PBR</span> <span class="tag">#металл</span> <span class="tag">#8ktextures</span> <span class="tag">#медь</span></div>
+            <a class="link" href="https://t.me/invlvl/139" target="_blank">Скачать архив</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <a href="136_preview.jpg" target="_blank" title="Открыть в полном разрешении"><img src="136_preview.jpg" alt="Copper Patina PBR Texture Pack №2  (8K Resolution, tileable)"></a>
+        <div class="info">
+            <div class="title">Copper Patina PBR Texture Pack №2  (8K Resolution, tileable)</div>
+            
+            <div class="tags"><span class="tag">#metal</span> <span class="tag">#copper</span> <span class="tag">#texture</span> <span class="tag">#PBR</span> <span class="tag">#металл</span> <span class="tag">#8ktextures</span> <span class="tag">#медь</span></div>
+            <a class="link" href="https://t.me/invlvl/137" target="_blank">Скачать архив</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <a href="134_preview.jpg" target="_blank" title="Открыть в полном разрешении"><img src="134_preview.jpg" alt="Copper Patina PBR Texture Pack №1  (8K Resolution, tileable)"></a>
+        <div class="info">
+            <div class="title">Copper Patina PBR Texture Pack №1  (8K Resolution, tileable)</div>
+            
+            <div class="tags"><span class="tag">#metal</span> <span class="tag">#copper</span> <span class="tag">#texture</span> <span class="tag">#PBR</span> <span class="tag">#металл</span> <span class="tag">#8ktextures</span> <span class="tag">#медь</span></div>
+            <a class="link" href="https://t.me/invlvl/135" target="_blank">Скачать архив</a>
+        </div>
+    </div>
     
     <div class="card">
         <a href="132_preview.jpg" target="_blank" title="Открыть в полном разрешении"><img src="132_preview.jpg" alt="Metal Rust PBR Texture Pack №7  (8K Resolution, tileable)"></a>
@@ -168,8 +241,44 @@
         </div>
     </div>
     
-        </div>
+                </div>
     <div class="pagination"><a href="index.html">1</a><span class="active">2</span></div>
+            </div>
+
+            <!-- Правый блок: Donate -->
+            <div class="sidebar">
+                <div class="side-block" onclick="openModal('donateModal')">
+                    <h3>{donate_title}</h3>
+                    <p>{donate_desc}</p>
+                    <span class="btn-link">{donate_btn}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно: Информация -->
+        <div id="infoModal" class="modal" onclick="closeModal(event, 'infoModal')">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
+                <h2>{info_modal_header}</h2>
+                <div class="readme-box">{readme_text}</div>
+            </div>
+        </div>
+
+        <!-- Модальное окно: Donate -->
+        <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
+                <h2>{donate_modal_header}</h2>
+                <p>{donate_intro}</p>
+                <div class="readme-box">{donate_text}</div>
+            </div>
+        </div>
+
+        <script>
+            function openModal(id) {{ document.getElementById(id).style.display = 'flex'; }}
+            function closeModalDirect(id) {{ document.getElementById(id).style.display = 'none'; }}
+            function closeModal(e, id) {{ if(e.target.id === id) {{ document.getElementById(id).style.display = 'none'; }} }}
+        </script>
     </body>
     </html>
     
