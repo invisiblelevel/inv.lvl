@@ -27,7 +27,7 @@ CATEGORY_NAMES_RU = {
     'leather': 'Кожа'
 }
 
-POSTS_PER_PAGE = 30
+POSTS_PER_PAGE = 32
 # ===============================================================
 
 DATA_FOLDER = 'public'
