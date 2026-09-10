@@ -75,4 +75,4 @@ one manually in GIMP / Photoshop by putting _Metallic into
 the red channel and _Smoothness into the alpha channel.
 
 Don't forget to disable sRGB (Color Texture) in Unity's
-texture import settings for all maps except _Albedo.
+texture import settings for all maps except _Albedo. 
