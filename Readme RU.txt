@@ -75,4 +75,4 @@ Unity (Standard / URP / HDRP) ожидает Metallic и Smoothness
 канал, а _Smoothness — в альфа-канал.
 
 Не забудьте в настройках текстуры в Unity отключить sRGB
-(Color Texture) для всех карт, кроме _Albedo.
+(Color Texture) для всех карт, кроме _Albedo. 
