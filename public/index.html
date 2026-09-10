@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Все текстуры</title>
-        <meta name="keywords" content="texture, 8ktextures, brass, metal, латунь, copper, медь, PBR, grille, металл, pbr textures, 3d assets">
+        <meta name="keywords" content="grille, медь, металл, copper, 8ktextures, texture, metal, brass, PBR, латунь, pbr textures, 3d assets">
         <meta name="description" content="Все текстуры — бесплатные PBR текстуры и материалы для 3D художников.">
         <style>
             body { font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
@@ -45,7 +45,7 @@
 
             /* Модальные окна */
             .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
-            .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }
+            .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }
             .close { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }
             .close:hover { color: #fff; }
             .modal-content code { background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }
@@ -379,6 +379,26 @@
         </div>
     </div>
     
+    <div class="card">
+        <a href="144_preview.jpg" target="_blank" title="Открыть в полном разрешении"><img src="144_preview.jpg" alt="Copper Patina PBR Texture Pack №5  (8K Resolution, tileable)"></a>
+        <div class="info">
+            <div class="title">Copper Patina PBR Texture Pack №5  (8K Resolution, tileable)</div>
+            
+            <div class="tags"><span class="tag">#metal</span> <span class="tag">#copper</span> <span class="tag">#texture</span> <span class="tag">#PBR</span> <span class="tag">#металл</span> <span class="tag">#8ktextures</span> <span class="tag">#медь</span></div>
+            <a class="link" href="https://t.me/invlvl/145" target="_blank">Скачать архив</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <a href="142_preview.jpg" target="_blank" title="Открыть в полном разрешении"><img src="142_preview.jpg" alt="Copper Patina PBR Texture Pack №4  (8K Resolution, tileable)"></a>
+        <div class="info">
+            <div class="title">Copper Patina PBR Texture Pack №4  (8K Resolution, tileable)</div>
+            
+            <div class="tags"><span class="tag">#metal</span> <span class="tag">#copper</span> <span class="tag">#texture</span> <span class="tag">#PBR</span> <span class="tag">#металл</span> <span class="tag">#8ktextures</span> <span class="tag">#медь</span></div>
+            <a class="link" href="https://t.me/invlvl/143" target="_blank">Скачать архив</a>
+        </div>
+    </div>
+    
                 </div>
     <div class="pagination"><span class="active">1</span><a href="index_page2.html">2</a></div>
             </div>
@@ -398,7 +418,7 @@
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
                 <h2>{modal_info_h}</h2>
-                <p>{modal_info_p}</p>
+                <div>{modal_info_p}</div>
             </div>
         </div>
 
@@ -407,10 +427,7 @@
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
                 <h2>{modal_donate_h}</h2>
-                <p>{modal_donate_p}</p>
-                <p><b>BTC:</b> <code>сюда_вставишь_свой_btc_кошелек</code></p>
-                <p><b>USDT (TRC-20):</b> <code>сюда_вставишь_свой_usdt_кошелек</code></p>
-                <p><b>ETH:</b> <code>сюда_вставишь_свой_eth_кошелек</code></p>
+                <div>{modal_donate_p}</div>
             </div>
         </div>
 
