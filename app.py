@@ -25,8 +25,6 @@ if not session_string:
 client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 def load_all_posts():
-    if os.path.exists(DATA_FOLDER):
-        pass
     if os.path.exists(POSTS_JSON):
         try:
             with open(POSTS_JSON, 'r', encoding='utf-8') as f:
@@ -121,7 +119,9 @@ def render_card(post, lang='ru'):
         tags_html = '<div class="tags">' + ' '.join([f'<span class="tag">{tag}</span>' for tag in post['hashtags']]) + '</div>'
 
     img_tag = f'<img src="{post["photo"]}" alt="{title}">' if post['photo'] else ''
-    card_img = f'<a href="{post["photo"]}" target="_blank" title="{'Open in full resolution' if lang == 'en' else 'Открыть в полном разрешении'}">{img_tag}</a>' if post['photo'] else ''
+    
+    title_attr = "Open in full resolution" if lang == 'en' else "Открыть в полном разрешении"
+    card_img = f'<a href="{post["photo"]}" target="_blank" title="{title_attr}">{img_tag}</a>' if post['photo'] else ''
     btn_text = 'Download Archive' if lang == 'en' else 'Скачать архив'
 
     return f'''
@@ -183,6 +183,8 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     modal_donate_h = 'Support Project' if lang == 'en' else 'Поддержать проект'
     modal_donate_p = 'If these materials save your time and help in your work, you can support the archive:' if lang == 'en' else 'Если материалы экономят время и помогают в работе, можешь поддержать архив:'
 
+    home_text = 'Home' if lang == 'en' else 'Главная'
+
     html = f'''
     <!DOCTYPE html>
     <html>
@@ -219,7 +221,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             .card .info .link:hover {{ background: #5a7fb5; }}
             
             .nav {{ text-align: center; margin-bottom: 20px; }}
-            .nav a, .nav span.lang-switch {{ color: #4a6fa5; text-decoration: none; margin: 0 10px; display: inline-block; }}
+            .nav a {{ color: #4a6fa5; text-decoration: none; margin: 0 10px; display: inline-block; }}
             .nav a:hover {{ text-decoration: underline; }}
             .lang-btn {{ background: #333; padding: 4px 10px; border-radius: 4px; border: 1px solid #4a6fa5; font-weight: bold; }}
             
@@ -244,7 +246,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     </head>
     <body>
         <div class="nav">
-            <a href="{home_link}">{'Home' if lang == 'en' else 'Главная'}</a>
+            <a href="{home_link}">{home_text}</a>
     '''
 
     for cat in category_posts.keys():
