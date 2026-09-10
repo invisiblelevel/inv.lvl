@@ -12,36 +12,7 @@ session_string = os.environ.get('SESSION_STRING', '')
 channel_link = os.environ.get('CHANNEL_LINK', '')
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
-
-CATEGORY_TRANSLATIONS_RU = {
-    'terrain': 'Ландшафт',
-    'metal': 'Металл',
-    'wood': 'Дерево',
-    'brick': 'Кирпич',
-    'concrete': 'Бетон',
-    'stone': 'Камень',
-    'tile': 'Плитка',
-    'fabric': 'Ткань',
-    'organic': 'Органика',
-    'plastic': 'Пластик',
-    'leather': 'Кожа'
-}
-
-CATEGORY_TRANSLATIONS_EN = {
-    'terrain': 'Terrain',
-    'metal': 'Metal',
-    'wood': 'Wood',
-    'brick': 'Brick',
-    'concrete': 'Concrete',
-    'stone': 'Stone',
-    'tile': 'Tile',
-    'fabric': 'Fabric',
-    'organic': 'Organic',
-    'plastic': 'Plastic',
-    'leather': 'Leather'
-}
-
-POSTS_PER_PAGE = 32
+POSTS_PER_PAGE = 30
 # ===============================================================
 
 DATA_FOLDER = 'public'
@@ -54,6 +25,8 @@ if not session_string:
 client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 def load_all_posts():
+    if os.path.exists(DATA_FOLDER):
+        pass
     if os.path.exists(POSTS_JSON):
         try:
             with open(POSTS_JSON, 'r', encoding='utf-8') as f:
@@ -70,15 +43,6 @@ def get_last_post_id(posts):
     if not posts:
         return 0
     return max(p.get('id', 0) for p in posts)
-
-def load_text_file(filename, fallback=""):
-    if os.path.exists(filename):
-        try:
-            with open(filename, 'r', encoding='utf-8') as f:
-                return f.read()
-        except:
-            return fallback
-    return fallback
 
 async def download_photo(message, filename):
     path = os.path.join(DATA_FOLDER, filename)
@@ -149,7 +113,7 @@ def get_category(post):
 
 def render_card(post, lang='ru'):
     lines = post['text'].split('\n') if post['text'] else []
-    title = lines[0] if lines else ("Текстура" if lang == 'ru' else "Texture")
+    title = lines[0] if lines else ("Texture" if lang == 'en' else "Текстура")
     desc = '\n'.join(lines[1:]) if len(lines) > 1 else ''
     
     tags_html = ""
@@ -157,11 +121,8 @@ def render_card(post, lang='ru'):
         tags_html = '<div class="tags">' + ' '.join([f'<span class="tag">{tag}</span>' for tag in post['hashtags']]) + '</div>'
 
     img_tag = f'<img src="{post["photo"]}" alt="{title}">' if post['photo'] else ''
-    # Для английской версии путь к картинке поднимается на уровень выше, если мы внутри папки /en/
-    img_src = f"../{post['photo']}" if lang == 'en' else post['photo']
-    card_img = f'<a href="{img_src}" target="_blank" title="Открыть в полном разрешении">{img_tag}</a>' if post['photo'] else ''
-
-    download_text = "Скачать архив" if lang == 'ru' else "Download Archive"
+    card_img = f'<a href="{post["photo"]}" target="_blank" title="{'Open in full resolution' if lang == 'en' else 'Открыть в полном разрешении'}">{img_tag}</a>' if post['photo'] else ''
+    btn_text = 'Download Archive' if lang == 'en' else 'Скачать архив'
 
     return f'''
     <div class="card">
@@ -170,27 +131,29 @@ def render_card(post, lang='ru'):
             <div class="title">{title}</div>
             {f'<div class="desc">{desc}</div>' if desc else ''}
             {tags_html}
-            {f'<a class="link" href="{post["archive_link"]}" target="_blank">{download_text}</a>' if post['archive_link'] else ''}
+            {f'<a class="link" href="{post["archive_link"]}" target="_blank">{btn_text}</a>' if post['archive_link'] else ''}
         </div>
     </div>
     '''
 
-def render_nav(current_page, total_pages, base_name):
+def render_nav(current_page, total_pages, base_name, lang='ru'):
     if total_pages <= 1:
         return ''
+    suffix = '_en' if lang == 'en' else ''
+    ext = '.html'
     nav = '<div class="pagination">'
     for i in range(1, total_pages + 1):
         if i == current_page:
             nav += f'<span class="active">{i}</span>'
         else:
             if i == 1:
-                nav += f'<a href="{base_name}.html">{i}</a>'
+                nav += f'<a href="{base_name}{suffix}{ext}">{i}</a>'
             else:
-                nav += f'<a href="{base_name}_page{i}.html">{i}</a>'
+                nav += f'<a href="{base_name}_page{i}{suffix}{ext}">{i}</a>'
     nav += '</div>'
     return nav
 
-def generate_page(posts, page_num, total_pages, base_name, title, category_posts, lang='ru', readme_text="", donate_text=""):
+def generate_page(posts, page_num, total_pages, base_name, title, category_posts, lang='ru'):
     start = (page_num - 1) * POSTS_PER_PAGE
     end = min(start + POSTS_PER_PAGE, len(posts))
     page_posts = posts[start:end]
@@ -201,25 +164,24 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             all_page_tags.add(t.lstrip('#'))
     keywords_str = ', '.join(all_page_tags)
 
-    home_text = "Главная" if lang == 'ru' else "Home"
-    desc_meta = "бесплатные PBR текстуры и материалы для 3D художников." if lang == 'ru' else "free PBR textures and materials for 3D artists."
+    suffix = '_en' if lang == 'en' else ''
+    home_link = f'index{suffix}.html'
+    other_lang_link = f'{base_name}.html' if lang == 'en' else f'{base_name}_en.html'
+    lang_btn_text = 'RU' if lang == 'en' else 'EN'
 
-    info_title = "ℹ️ Информация" if lang == 'ru' else "ℹ️ Information"
-    info_desc = "О проекте, правилах и архиве." if lang == 'ru' else "About the project & README."
-    info_btn = "Открыть" if lang == 'ru' else "Open"
+    info_title = 'Info' if lang == 'en' else 'Информация'
+    info_desc = 'About the project and archive.' if lang == 'en' else 'О проекте и архиве.'
+    info_btn = 'Open' if lang == 'en' else 'Открыть'
 
-    donate_title = "🪙 Donate"
-    donate_desc = "Поддержать проект копеечкой." if lang == 'ru' else "Support the project."
-    donate_btn = "Реквизиты" if lang == 'ru' else "Details"
+    donate_title = 'Donate' if lang == 'en' else 'Donate'
+    donate_desc = 'Support the project.' if lang == 'en' else 'Поддержать проект.'
+    donate_btn = 'Details' if lang == 'en' else 'Реквизиты'
 
-    info_modal_header = "О проекте / README" if lang == 'ru' else "About the Project / README"
-    donate_modal_header = "Поддержать проект" if lang == 'ru' else "Support the Project"
-    donate_intro = "Если материалы экономят время и реально заходят в работе — можешь закинуть на развитие архива:" if lang == 'ru' else "If these materials save your time and help in your work, you can support the archive:"
+    modal_info_h = 'About Project' if lang == 'en' else 'Информация о проекте'
+    modal_info_p = 'Free archive of PBR textures and materials for 3D artists and gamedev.' if lang == 'en' else 'Бесплатный архив PBR-текстур и материалов для 3D-художников и геймдева.'
 
-    category_translations = CATEGORY_TRANSLATIONS_RU if lang == 'ru' else CATEGORY_TRANSLATIONS_EN
-
-    # Ссылки на переключение языков
-    lang_switch = '<a href="en/index.html" class="lang-switcher">🇬🇧 EN</a>' if lang == 'ru' else '<a href="../index.html" class="lang-switcher">🇷🇺 RU</a>'
+    modal_donate_h = 'Support Project' if lang == 'en' else 'Поддержать проект'
+    modal_donate_p = 'If these materials save your time and help in your work, you can support the archive:' if lang == 'en' else 'Если материалы экономят время и помогают в работе, можешь поддержать архив:'
 
     html = f'''
     <!DOCTYPE html>
@@ -229,7 +191,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{title}</title>
         <meta name="keywords" content="{keywords_str}, pbr textures, 3d assets">
-        <meta name="description" content="{title} — {desc_meta}">
+        <meta name="description" content="{title} — бесплатные PBR текстуры и материалы для 3D художников.">
         <style>
             body {{ font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }}
             .site-wrapper {{ display: flex; max-width: 1550px; margin: 0 auto; gap: 20px; align-items: flex-start; justify-content: center; }}
@@ -256,11 +218,10 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             .card .info .link {{ display: inline-block; margin-top: 10px; background: #4a6fa5; color: #fff; padding: 5px 15px; border-radius: 4px; text-decoration: none; font-size: 0.9em; }}
             .card .info .link:hover {{ background: #5a7fb5; }}
             
-            .nav {{ text-align: center; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }}
-            .nav a {{ color: #4a6fa5; text-decoration: none; margin: 0 5px; }}
+            .nav {{ text-align: center; margin-bottom: 20px; }}
+            .nav a, .nav span.lang-switch {{ color: #4a6fa5; text-decoration: none; margin: 0 10px; display: inline-block; }}
             .nav a:hover {{ text-decoration: underline; }}
-            .lang-switcher {{ background: #333; padding: 5px 12px; border-radius: 4px; font-weight: bold; color: #fff !important; border: 1px solid #444; }}
-            .lang-switcher:hover {{ background: #444; text-decoration: none !important; }}
+            .lang-btn {{ background: #333; padding: 4px 10px; border-radius: 4px; border: 1px solid #4a6fa5; font-weight: bold; }}
             
             .pagination {{ text-align: center; margin-top: 30px; }}
             .pagination a, .pagination span {{ display: inline-block; padding: 8px 14px; margin: 0 4px; background: #2a2a2a; border-radius: 4px; color: #fff; text-decoration: none; }}
@@ -269,10 +230,9 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
             /* Модальные окна */
             .modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }}
-            .modal-content {{ background: #222; padding: 30px; border-radius: 10px; max-width: 750px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }}
+            .modal-content {{ background: #222; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }}
             .close {{ position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }}
             .close:hover {{ color: #fff; }}
-            .readme-box {{ background: #111; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 0.85em; white-space: pre-wrap; color: #ccc; margin-top: 15px; }}
             .modal-content code {{ background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }}
 
             @media (max-width: 1100px) {{
@@ -284,15 +244,15 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     </head>
     <body>
         <div class="nav">
-            <a href="index.html">{home_text}</a>
+            <a href="{home_link}">{'Home' if lang == 'en' else 'Главная'}</a>
     '''
 
     for cat in category_posts.keys():
-        cat_display_name = category_translations.get(cat, cat.capitalize())
-        html += f'<a href="{cat}.html">{cat_display_name}</a>'
+        cat_filename = f'{cat}{suffix}.html'
+        html += f'<a href="{cat_filename}">{cat.capitalize()}</a>'
 
     html += f'''
-            {lang_switch}
+            <a href="{other_lang_link}" class="lang-btn">{lang_btn_text}</a>
         </div>
         <h1 style="text-align:center; margin-bottom: 30px;">{title}</h1>
         
@@ -300,7 +260,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             <!-- Левый блок: Информация -->
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('infoModal')">
-                    <h3>{info_title}</h3>
+                    <h3>ℹ️ {info_title}</h3>
                     <p>{info_desc}</p>
                     <span class="btn-link">{info_btn}</span>
                 </div>
@@ -312,19 +272,19 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     '''
 
     for post in page_posts:
-        html += render_card(post, lang=lang)
+        html += render_card(post, lang)
 
     html += '''
                 </div>
     '''
-    html += render_nav(page_num, total_pages, base_name)
+    html += render_nav(page_num, total_pages, base_name, lang)
     html += '''
             </div>
 
             <!-- Правый блок: Donate -->
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('donateModal')">
-                    <h3>{donate_title}</h3>
+                    <h3>🪙 {donate_title}</h3>
                     <p>{donate_desc}</p>
                     <span class="btn-link">{donate_btn}</span>
                 </div>
@@ -335,8 +295,8 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
         <div id="infoModal" class="modal" onclick="closeModal(event, 'infoModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
-                <h2>{info_modal_header}</h2>
-                <div class="readme-box">{readme_text}</div>
+                <h2>{modal_info_h}</h2>
+                <p>{modal_info_p}</p>
             </div>
         </div>
 
@@ -344,16 +304,28 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
-                <h2>{donate_modal_header}</h2>
-                <p>{donate_intro}</p>
-                <div class="readme-box">{donate_text}</div>
+                <h2>{modal_donate_h}</h2>
+                <p>{modal_donate_p}</p>
+                <p><b>BTC:</b> <code>сюда_вставишь_свой_btc_кошелек</code></p>
+                <p><b>USDT (TRC-20):</b> <code>сюда_вставишь_свой_usdt_кошелек</code></p>
+                <p><b>ETH:</b> <code>сюда_вставишь_свой_eth_кошелек</code></p>
             </div>
         </div>
 
         <script>
-            function openModal(id) {{ document.getElementById(id).style.display = 'flex'; }}
-            function closeModalDirect(id) {{ document.getElementById(id).style.display = 'none'; }}
-            function closeModal(e, id) {{ if(e.target.id === id) {{ document.getElementById(id).style.display = 'none'; }} }}
+            function openModal(id) {{ 
+                var m = document.getElementById(id);
+                if(m) m.style.display = 'flex'; 
+            }}
+            function closeModalDirect(id) {{ 
+                var m = document.getElementById(id);
+                if(m) m.style.display = 'none'; 
+            }}
+            function closeModal(e, id) {{ 
+                if(e.target.id === id) {{ 
+                    document.getElementById(id).style.display = 'none'; 
+                }} 
+            }}
         </script>
     </body>
     </html>
@@ -375,49 +347,38 @@ def generate_site(all_posts):
                 category_posts[cat] = []
             category_posts[cat].append(post)
 
-    # Читаем файлы с текстами
-    readme_ru = load_text_file('readme RU.txt', 'Информация отсутствует.')
-    readme_en = load_text_file('readme EN.txt', 'Information is not available.')
-    donate_text = load_text_file('Donate.txt', 'Реквизиты отсутствуют.')
-
+    # Генерация русской версии
     total_pages = math.ceil(len(sorted_posts) / POSTS_PER_PAGE)
-
-    # ================= 1. ГЕНЕРАЦИЯ РУССКОЙ ВЕРСИИ (в корне public/) =================
     for page_num in range(1, total_pages + 1):
         filename = 'index.html' if page_num == 1 else f'index_page{page_num}.html'
-        html = generate_page(sorted_posts, page_num, total_pages, 'index', 'Все текстуры', category_posts, lang='ru', readme_text=readme_ru, donate_text=donate_text)
+        html = generate_page(sorted_posts, page_num, total_pages, 'index', 'Все текстуры', category_posts, lang='ru')
         with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
             f.write(html)
 
     for cat, cat_posts in category_posts.items():
-        cat_title = CATEGORY_TRANSLATIONS_RU.get(cat, cat.capitalize())
         total_pages_cat = math.ceil(len(cat_posts) / POSTS_PER_PAGE)
         for page_num in range(1, total_pages_cat + 1):
             filename = f'{cat}.html' if page_num == 1 else f'{cat}_page{page_num}.html'
-            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat_title, category_posts, lang='ru', readme_text=readme_ru, donate_text=donate_text)
+            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat.capitalize(), category_posts, lang='ru')
             with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
                 f.write(html)
 
-    # ================= 2. ГЕНЕРАЦИЯ АНГЛИЙСКОЙ ВЕРСИИ (в public/en/) =================
-    EN_FOLDER = os.path.join(DATA_FOLDER, 'en')
-    os.makedirs(EN_FOLDER, exist_ok=True)
-
+    # Генерация английской версии
     for page_num in range(1, total_pages + 1):
-        filename = 'index.html' if page_num == 1 else f'index_page{page_num}.html'
-        html = generate_page(sorted_posts, page_num, total_pages, 'index', 'All Textures', category_posts, lang='en', readme_text=readme_en, donate_text=donate_text)
-        with open(os.path.join(EN_FOLDER, filename), 'w', encoding='utf-8') as f:
+        filename = 'index_en.html' if page_num == 1 else f'index_page{page_num}_en.html'
+        html = generate_page(sorted_posts, page_num, total_pages, 'index', 'All Textures', category_posts, lang='en')
+        with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
             f.write(html)
 
     for cat, cat_posts in category_posts.items():
-        cat_title = CATEGORY_TRANSLATIONS_EN.get(cat, cat.capitalize())
         total_pages_cat = math.ceil(len(cat_posts) / POSTS_PER_PAGE)
         for page_num in range(1, total_pages_cat + 1):
-            filename = f'{cat}.html' if page_num == 1 else f'{cat}_page{page_num}.html'
-            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat_title, category_posts, lang='en', readme_text=readme_en, donate_text=donate_text)
-            with open(os.path.join(EN_FOLDER, filename), 'w', encoding='utf-8') as f:
+            filename = f'{cat}_en.html' if page_num == 1 else f'{cat}_page{page_num}_en.html'
+            html = generate_page(cat_posts, page_num, total_pages_cat, cat, cat.capitalize(), category_posts, lang='en')
+            with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
                 f.write(html)
 
-    print(f"✅ Сайт успешно пересобран в папке {DATA_FOLDER} (русская и английская версии готовы)")
+    print(f"✅ Сайт успешно пересобран (RU + EN) в папке {DATA_FOLDER}")
 
 async def main():
     print("🔍 Проверяю канал на новые посты...")
@@ -427,14 +388,14 @@ async def main():
     await client.start()
 
     try:
-        new_messages = await parse_channel(all_posts)
-        if new_messages:
-            all_posts.extend(new_messages)
+        new_posts = await parse_channel(all_posts)
+        if new_posts:
+            all_posts.extend(new_posts)
             save_all_posts(all_posts)
             generate_site(all_posts)
         else:
             print("ℹ️ База актуальна, генерация страниц не требуется.")
-            if not os.path.exists(os.path.join(DATA_FOLDER, "index.html")):
+            if not os.path.exists(os.path.join(DATA_FOLDER, "index.html")) or not os.path.exists(os.path.join(DATA_FOLDER, "index_en.html")):
                 generate_site(all_posts)
     finally:
         await client.disconnect()
