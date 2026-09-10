@@ -4,6 +4,7 @@ import asyncio
 import subprocess
 import html
 import math
+from datetime import datetime
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.errors import FloodWaitError
@@ -13,6 +14,9 @@ api_id = int(os.environ.get('API_ID', 0))
 api_hash = os.environ.get('API_HASH', '')
 session_string = os.environ.get('SESSION_STRING', '')
 channel_link = os.environ.get('CHANNEL_LINK', '')
+
+# Ссылка на твой сайт — ВСТАВЬ СВОЮ!
+SITE_URL = 'https://lazycatdvrz.github.io/invisiblelevel'
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
 
@@ -27,7 +31,23 @@ CATEGORY_NAMES_RU = {
     'fabric': 'Ткань',
     'organic': 'Органика',
     'plastic': 'Пластик',
+    'other': 'Другое',
     'leather': 'Кожа'
+}
+
+CATEGORY_NAMES_EN = {
+    'terrain': 'Terrain',
+    'metal': 'Metal',
+    'wood': 'Wood',
+    'brick': 'Brick',
+    'concrete': 'Concrete',
+    'stone': 'Stone',
+    'tile': 'Tile',
+    'fabric': 'Fabric',
+    'organic': 'Organic',
+    'plastic': 'Plastic',
+    'other': 'Other',
+    'leather': 'Leather'
 }
 
 POSTS_PER_PAGE = 32
@@ -70,7 +90,6 @@ def escape_html(text):
 
 
 def format_text_for_html(text):
-    """Преобразует простой текст в аккуратный HTML с переносами и абзацами."""
     if not text:
         return ''
     escaped = html.escape(text)
@@ -87,7 +106,6 @@ def format_text_for_html(text):
 
 def load_text_file(filename):
     print(f"🔍 Ищу файл: {filename}")
-
     if not os.path.exists(filename):
         if filename == 'Readme RU.txt':
             with open(filename, 'w', encoding='utf-8') as f:
@@ -102,39 +120,29 @@ def load_text_file(filename):
             with open(filename, 'w', encoding='utf-8') as f:
                 f.write("Support the project:\n\nUSDT (TRC20): Your wallet\nBoosty / DonationAlerts: link")
 
-    variants = [
-        filename,
-        filename.lower(),
-        filename.upper(),
-        filename.replace(' ', ''),
-        filename.replace(' ', '_'),
-        filename.replace(' ', '-'),
-    ]
-
+    variants = [filename, filename.lower(), filename.upper(),
+                filename.replace(' ', ''), filename.replace(' ', '_'), filename.replace(' ', '-')]
     for name in variants:
         if os.path.exists(name):
             for encoding in ['utf-8', 'utf-8-sig', 'cp1251', 'latin-1']:
                 try:
                     with open(name, 'r', encoding=encoding) as f:
                         content = f.read()
-                        print(f"✅ Файл найден и прочитан: {name} (encoding: {encoding})")
+                        print(f"✅ Файл найден: {name} ({encoding})")
                         return content
-                except Exception as e:
-                    print(f"⚠️ Не удалось прочитать {name} в {encoding}: {e}")
+                except Exception:
                     continue
-
-    print(f"⚠️ Файл {filename} не найден. Использую заглушку.")
+    print(f"⚠️ Файл {filename} не найден.")
     return "Информация загружается..."
 
 
 async def download_photo(message, filename):
-    """Скачивает фото с паузой, чтобы не триггернуть антифлуд Telegram."""
     path = os.path.join(DATA_FOLDER, filename)
     if os.path.exists(path):
         return path
     try:
         await client.download_media(message.media, file=path)
-        await asyncio.sleep(1.5)  # Пауза между скачиваниями
+        await asyncio.sleep(1.5)
         return path
     except FloodWaitError as e:
         print(f"⏳ Telegram просит подождать {e.seconds} секунд")
@@ -148,9 +156,8 @@ async def download_photo(message, filename):
 async def parse_channel(existing_posts):
     entity = await client.get_entity(channel_link)
     username = entity.username
-
     last_id = get_last_post_id(existing_posts)
-    print(f"📌 Последний сохраненный ID поста: {last_id}")
+    print(f"📌 Последний ID: {last_id}")
 
     new_messages = []
     async for msg in client.iter_messages(entity, min_id=last_id, reverse=True):
@@ -167,16 +174,9 @@ async def parse_channel(existing_posts):
         if msg.photo:
             filename = f"{msg.id}_preview.jpg"
             await download_photo(msg, filename)
-            current_post = {
-                'id': msg.id,
-                'photo': filename,
-                'text': "",
-                'archive_link': None,
-                'hashtags': []
-            }
+            current_post = {'id': msg.id, 'photo': filename, 'text': "", 'archive_link': None, 'hashtags': []}
             new_posts.append(current_post)
-            print(f"📸 Новый пост #{msg.id} (картинка)")
-
+            print(f"📸 Новый пост #{msg.id}")
         elif msg.document:
             if current_post:
                 current_post['id'] = max(current_post.get('id', 0), msg.id)
@@ -187,10 +187,10 @@ async def parse_channel(existing_posts):
                     current_post['hashtags'] = hashtags
                     lines = [line.strip() for line in raw_text.split('\n') if line.strip() and not line.strip().startswith('#')]
                     current_post['text'] = '\n'.join(lines)
-                print(f"📦 Новый пост #{msg.id} (архив + текст)")
+                print(f"📦 Новый пост #{msg.id}")
 
     new_posts = [p for p in new_posts if p['photo'] is not None]
-    print(f"✅ Найдено новых постов: {len(new_posts)}")
+    print(f"✅ Новых постов: {len(new_posts)}")
     return new_posts
 
 
@@ -212,19 +212,19 @@ def render_card(post, lang='ru'):
     if post.get('hashtags'):
         tags_html = '<div class="tags">' + ' '.join([f'<span class="tag">{escape_html(tag)}</span>' for tag in post['hashtags']]) + '</div>'
 
-    img_tag = f'<img src="{post["photo"]}" alt="{title}">' if post['photo'] else ''
+    img_tag = f'<img src="{post["photo"]}" alt="{title} — PBR texture" loading="lazy">' if post['photo'] else ''
     title_attr = "Open in full resolution" if lang == 'en' else "Открыть в полном разрешении"
     card_img = f'<a href="{post["photo"]}" target="_blank" title="{title_attr}">{img_tag}</a>' if post['photo'] else ''
     btn_text = 'Download Archive' if lang == 'en' else 'Скачать архив'
 
     return f'''
-    <div class="card">
+    <div class="card" itemscope itemtype="https://schema.org/CreativeWork">
         {card_img}
         <div class="info">
-            <div class="title">{title}</div>
-            {f'<div class="desc">{desc}</div>' if desc else ''}
+            <div class="title" itemprop="name">{title}</div>
+            {f'<div class="desc" itemprop="description">{desc}</div>' if desc else ''}
             {tags_html}
-            {f'<a class="link" href="{post["archive_link"]}" target="_blank">{btn_text}</a>' if post['archive_link'] else ''}
+            {f'<a class="link" href="{post["archive_link"]}" target="_blank" rel="noopener">{btn_text}</a>' if post['archive_link'] else ''}
         </div>
     </div>
     '''
@@ -234,18 +234,65 @@ def render_nav(current_page, total_pages, base_name, lang='ru'):
     if total_pages <= 1:
         return ''
     suffix = '_en' if lang == 'en' else ''
-    ext = '.html'
     nav = '<div class="pagination">'
     for i in range(1, total_pages + 1):
         if i == current_page:
             nav += f'<span class="active">{i}</span>'
         else:
             if i == 1:
-                nav += f'<a href="{base_name}{suffix}{ext}">{i}</a>'
+                nav += f'<a href="{base_name}{suffix}.html">{i}</a>'
             else:
-                nav += f'<a href="{base_name}_page{i}{suffix}{ext}">{i}</a>'
+                nav += f'<a href="{base_name}_page{i}{suffix}.html">{i}</a>'
     nav += '</div>'
     return nav
+
+
+def build_seo_block(title, description, keywords, url, image_url, lang='ru'):
+    """Генерирует SEO-метатеги для страницы."""
+    safe_title = escape_html(title)
+    safe_desc = escape_html(description)
+    safe_keywords = escape_html(keywords)
+    safe_url = escape_html(url)
+    safe_image = escape_html(image_url) if image_url else f"{SITE_URL}/preview.jpg"
+    locale = 'ru_RU' if lang == 'ru' else 'en_US'
+    alt_locale = 'en_US' if lang == 'ru' else 'ru_RU'
+
+    return f'''
+        <title>{safe_title}</title>
+        <meta name="description" content="{safe_desc}">
+        <meta name="keywords" content="{safe_keywords}">
+        <meta name="robots" content="index, follow">
+        <meta name="author" content="InvisibleLevel">
+        <link rel="canonical" href="{safe_url}">
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="{safe_title}">
+        <meta property="og:description" content="{safe_desc}">
+        <meta property="og:url" content="{safe_url}">
+        <meta property="og:image" content="{safe_image}">
+        <meta property="og:site_name" content="InvisibleLevel Textures">
+        <meta property="og:locale" content="{locale}">
+        <meta property="og:locale:alternate" content="{alt_locale}">
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{safe_title}">
+        <meta name="twitter:description" content="{safe_desc}">
+        <meta name="twitter:image" content="{safe_image}">
+
+        <!-- Schema.org -->
+        <script type="application/ld+json">
+        {{
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "{safe_title}",
+            "description": "{safe_desc}",
+            "url": "{safe_url}",
+            "inLanguage": "{'ru' if lang == 'ru' else 'en'}"
+        }}
+        </script>
+    '''
 
 
 def generate_page(posts, page_num, total_pages, base_name, title, category_posts, lang='ru'):
@@ -257,9 +304,28 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     for p in page_posts:
         for t in p.get('hashtags', []):
             all_page_tags.add(t.lstrip('#'))
-    keywords_str = ', '.join(all_page_tags)
+    keywords_str = ', '.join(all_page_tags) if all_page_tags else "pbr textures, 3d assets, free textures"
 
+    # URL и картинка для SEO
     suffix = '_en' if lang == 'en' else ''
+    page_suffix = '' if page_num == 1 else f'_page{page_num}'
+    url = f"{SITE_URL}/{base_name}{page_suffix}{suffix}.html"
+
+    first_photo = None
+    for p in page_posts:
+        if p.get('photo'):
+            first_photo = f"{SITE_URL}/{p['photo']}"
+            break
+
+    if lang == 'ru':
+        seo_title = f"{title} — Бесплатные PBR текстуры | InvisibleLevel"
+        seo_desc = f"{title}. Бесплатные PBR текстуры высокого разрешения для 3D художников и разработчиков игр. Скачивай бесплатно: {keywords_str}."
+    else:
+        seo_title = f"{title} — Free PBR Textures | InvisibleLevel"
+        seo_desc = f"{title}. Free high-resolution PBR textures for 3D artists and game developers. Download for free: {keywords_str}."
+
+    seo_block = build_seo_block(seo_title, seo_desc, keywords_str, url, first_photo, lang)
+
     home_link = f'index{suffix}.html'
     other_lang_link = f'{base_name}.html' if lang == 'en' else f'{base_name}_en.html'
     lang_btn_text = 'RU' if lang == 'en' else 'EN'
@@ -287,13 +353,11 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
     html_page = f'''
     <!DOCTYPE html>
-    <html>
+    <html lang="{'ru' if lang == 'ru' else 'en'}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{title}</title>
-        <meta name="keywords" content="{keywords_str}, pbr textures, 3d assets">
-        <meta name="description" content="{title} — бесплатные PBR текстуры и материалы для 3D художников.">
+        {seo_block}
         <style>
             body {{ font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }}
             .site-wrapper {{ display: flex; max-width: 1550px; margin: 0 auto; gap: 20px; align-items: flex-start; justify-content: center; }}
@@ -329,10 +393,8 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             .modal-content {{ background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.7; font-size: 1rem; }}
             .modal-content h2 {{ margin-top: 0; margin-bottom: 20px; color: #8ab4f8; }}
             .modal-content .text-body {{ color: #ddd; }}
-            .modal-content .text-body br {{ line-height: 1.7; }}
             .close {{ position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }}
             .close:hover {{ color: #fff; }}
-            .modal-content code {{ background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }}
             @media (max-width: 1100px) {{
                 .site-wrapper {{ flex-direction: column; align-items: stretch; }}
                 .sidebar {{ width: 100%; position: static; flex-direction: row; }}
@@ -347,7 +409,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
     for cat in category_posts.keys():
         cat_filename = f'{cat}{suffix}.html'
-        cat_display = CATEGORY_NAMES_RU.get(cat, cat.capitalize()) if lang == 'ru' else cat.capitalize()
+        cat_display = CATEGORY_NAMES_RU.get(cat, cat.capitalize()) if lang == 'ru' else CATEGORY_NAMES_EN.get(cat, cat.capitalize())
         html_page += f'<a href="{cat_filename}">{cat_display}</a>'
 
     html_page += f'''
@@ -418,6 +480,39 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     return html_page
 
 
+def generate_robots_txt():
+    """Создаёт robots.txt для поисковиков."""
+    robots = f"""User-agent: *
+Allow: /
+
+Sitemap: {SITE_URL}/sitemap.xml
+"""
+    with open(os.path.join(DATA_FOLDER, 'robots.txt'), 'w', encoding='utf-8') as f:
+        f.write(robots)
+    print("✅ robots.txt создан")
+
+
+def generate_sitemap(all_pages):
+    """Создаёт sitemap.xml со всеми страницами сайта."""
+    today = datetime.now().strftime('%Y-%m-%d')
+    urls = ""
+    for page_url in all_pages:
+        urls += f"""  <url>
+    <loc>{SITE_URL}/{page_url}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+"""
+    sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls}</urlset>
+"""
+    with open(os.path.join(DATA_FOLDER, 'sitemap.xml'), 'w', encoding='utf-8') as f:
+        f.write(sitemap)
+    print(f"✅ sitemap.xml создан ({len(all_pages)} страниц)")
+
+
 def generate_site(all_posts):
     if not all_posts:
         print("ℹ️ Нет постов для генерации сайта")
@@ -433,6 +528,8 @@ def generate_site(all_posts):
                 category_posts[cat] = []
             category_posts[cat].append(post)
 
+    all_pages = ['index.html', 'index_en.html']
+
     # Русская версия
     total_pages = math.ceil(len(sorted_posts) / POSTS_PER_PAGE)
     for page_num in range(1, total_pages + 1):
@@ -440,6 +537,7 @@ def generate_site(all_posts):
         html_content = generate_page(sorted_posts, page_num, total_pages, 'index', 'Все текстуры', category_posts, lang='ru')
         with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
             f.write(html_content)
+        all_pages.append(filename)
 
     for cat, cat_posts in category_posts.items():
         total_pages_cat = math.ceil(len(cat_posts) / POSTS_PER_PAGE)
@@ -449,6 +547,7 @@ def generate_site(all_posts):
             html_content = generate_page(cat_posts, page_num, total_pages_cat, cat, cat_title_ru, category_posts, lang='ru')
             with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
                 f.write(html_content)
+            all_pages.append(filename)
 
     # Английская версия
     for page_num in range(1, total_pages + 1):
@@ -456,22 +555,28 @@ def generate_site(all_posts):
         html_content = generate_page(sorted_posts, page_num, total_pages, 'index', 'All Textures', category_posts, lang='en')
         with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
             f.write(html_content)
+        all_pages.append(filename)
 
     for cat, cat_posts in category_posts.items():
         total_pages_cat = math.ceil(len(cat_posts) / POSTS_PER_PAGE)
-        cat_title_en = cat.capitalize()
+        cat_title_en = CATEGORY_NAMES_EN.get(cat, cat.capitalize())
         for page_num in range(1, total_pages_cat + 1):
             filename = f'{cat}_en.html' if page_num == 1 else f'{cat}_page{page_num}_en.html'
             html_content = generate_page(cat_posts, page_num, total_pages_cat, cat, cat_title_en, category_posts, lang='en')
             with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
                 f.write(html_content)
+            all_pages.append(filename)
 
-    print(f"✅ Сайт успешно пересобран (RU + EN) в папке {DATA_FOLDER}")
+    # SEO-файлы
+    generate_robots_txt()
+    generate_sitemap(all_pages)
+
+    print(f"✅ Сайт пересобран (RU + EN) + SEO файлы в папке {DATA_FOLDER}")
 
 
 def git_commit_and_push():
     try:
-        print("🔄 Отправляю новые картинки и базу обратно в репозиторий...")
+        print("🔄 Отправляю изменения в репозиторий...")
         subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True)
         subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
         subprocess.run(["git", "add", "posts.json", "public/"], check=True)
@@ -480,18 +585,18 @@ def git_commit_and_push():
         if status.stdout.strip():
             subprocess.run(["git", "commit", "-m", "Auto-update posts and images [skip ci]"], check=True)
             subprocess.run(["git", "push"], check=True)
-            print("✅ Файлы успешно закоммичены и запушены в репозиторий!")
+            print("✅ Файлы запушены в репозиторий!")
         else:
-            print("ℹ️ Нет новых изменений для коммита в Git.")
+            print("ℹ️ Нет изменений для коммита.")
     except Exception as e:
-        print(f"⚠️ Ошибка при автокоммите в Git: {e}")
+        print(f"⚠️ Ошибка при автокоммите: {e}")
 
 
 async def main():
-    print("🔍 Проверяю канал на новые посты...")
+    print("🔍 Проверяю канал...")
     all_posts = load_all_posts()
 
-    print("👤 Авторизуюсь через StringSession...")
+    print("👤 Авторизуюсь...")
     await client.start()
 
     try:
@@ -502,7 +607,9 @@ async def main():
             generate_site(all_posts)
             git_commit_and_push()
         else:
-            print("ℹ️ Новых постов нет, ничего не меняю")
+            print("ℹ️ Новых постов нет, пересобираю сайт для обновления SEO...")
+            generate_site(all_posts)
+            git_commit_and_push()
     finally:
         await client.disconnect()
         print("🔒 Сессия закрыта")
