@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lazycatdvrz.github.io/invisiblelevel/sitemap.xml
+Sitemap: https://invisiblelevel.github.io/inv.lvl//sitemap.xml
