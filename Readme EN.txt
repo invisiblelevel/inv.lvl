@@ -17,7 +17,7 @@ Each texture includes the following maps:
   _Height      — Height map (for parallax / displacement)
   _AO          — Ambient Occlusion
   _Metallic    — Metalness
-  _Smoothness  — Smoothness (for Unity)
+  _Smoothness or Roughness  — Smoothness (for Unity) or Roughness (Unreal)
   _ORM         — Packed map (R=AO, G=Roughness, B=Metallic)
 
 Resolutions: 8K.
