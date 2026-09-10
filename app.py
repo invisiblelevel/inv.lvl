@@ -65,15 +65,28 @@ def get_last_post_id(posts):
 
 
 def escape_html(text):
-    """Экранирует HTML-символы, чтобы текст не сломал вёрстку"""
     return html.escape(text)
 
 
+def format_text_for_html(text):
+    """Преобразует простой текст в аккуратный HTML с переносами и абзацами."""
+    if not text:
+        return ''
+    escaped = html.escape(text)
+    lines = escaped.split('\n')
+    result_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            result_lines.append('<br>')
+        else:
+            result_lines.append(stripped + '<br>')
+    return ''.join(result_lines)
+
+
 def load_text_file(filename):
-    """Загружает текстовый файл, ищет разные варианты имени"""
     print(f"🔍 Ищу файл: {filename}")
 
-    # Автоматически создаем файлы-заглушки, если их нет
     if not os.path.exists(filename):
         if filename == 'Readme RU.txt':
             with open(filename, 'w', encoding='utf-8') as f:
@@ -84,8 +97,10 @@ def load_text_file(filename):
         elif filename == 'Donate.txt':
             with open(filename, 'w', encoding='utf-8') as f:
                 f.write("Поддержать проект:\n\nUSDT (TRC20): Ваш кошелек\nBoosty / DonationAlerts: ссылка")
+        elif filename == 'Donate EN.txt':
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write("Support the project:\n\nUSDT (TRC20): Your wallet\nBoosty / DonationAlerts: link")
 
-    # Ищем разные варианты имени
     variants = [
         filename,
         filename.lower(),
@@ -254,11 +269,12 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
     readme_filename = 'Readme EN.txt' if lang == 'en' else 'Readme RU.txt'
     readme_text = load_text_file(readme_filename)
-    modal_info_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + escape_html(readme_text) + '</pre>'
+    modal_info_p = format_text_for_html(readme_text)
 
     modal_donate_h = 'Support Project' if lang == 'en' else 'Поддержать проект'
-    donate_text = load_text_file('Donate.txt')
-    modal_donate_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + escape_html(donate_text) + '</pre>'
+    donate_filename = 'Donate EN.txt' if lang == 'en' else 'Donate.txt'
+    donate_text = load_text_file(donate_filename)
+    modal_donate_p = format_text_for_html(donate_text)
 
     home_text = 'Home' if lang == 'en' else 'Главная'
 
@@ -277,7 +293,8 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             .sidebar {{ width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; }}
             .side-block {{ background: #2a2a2a; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, background 0.2s; text-align: center; }}
             .side-block:hover {{ background: #333; transform: translateY(-2px); }}
-            .side-block h3 {{ margin-top: 0; color: #fff; font-size: 1.1em; }}
+            .side-block h3 {{ margin-top: 0; color: #fff; font-size: 1.1em; display: flex; align-items: center; justify-content: center; gap: 8px; }}
+            .side-block h3 svg {{ width: 20px; height: 20px; fill: #8ab4f8; }}
             .side-block p {{ color: #aaa; font-size: 0.85em; margin-bottom: 15px; }}
             .side-block .btn-link {{ display: inline-block; background: #4a6fa5; color: #fff; padding: 6px 15px; border-radius: 4px; font-size: 0.85em; }}
             .main-content {{ flex: 1; min-width: 0; max-width: 1100px; }}
@@ -302,7 +319,10 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             .pagination a:hover {{ background: #4a6fa5; }}
             .pagination span.active {{ background: #4a6fa5; }}
             .modal {{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }}
-            .modal-content {{ background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }}
+            .modal-content {{ background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.7; font-size: 1rem; }}
+            .modal-content h2 {{ margin-top: 0; margin-bottom: 20px; color: #8ab4f8; }}
+            .modal-content .text-body {{ color: #ddd; }}
+            .modal-content .text-body br {{ line-height: 1.7; }}
             .close {{ position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }}
             .close:hover {{ color: #fff; }}
             .modal-content code {{ background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }}
@@ -330,7 +350,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
         <div class="site-wrapper">
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('infoModal')">
-                    <h3>ℹ️ {info_title}</h3>
+                    <h3><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> {info_title}</h3>
                     <p>{info_desc}</p>
                     <span class="btn-link">{info_btn}</span>
                 </div>
@@ -350,7 +370,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             </div>
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('donateModal')">
-                    <h3>🪙 {donate_title}</h3>
+                    <h3><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> {donate_title}</h3>
                     <p>{donate_desc}</p>
                     <span class="btn-link">{donate_btn}</span>
                 </div>
@@ -360,14 +380,14 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
                 <h2>{modal_info_h}</h2>
-                <div>{modal_info_p}</div>
+                <div class="text-body">{modal_info_p}</div>
             </div>
         </div>
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
                 <h2>{modal_donate_h}</h2>
-                <div>{modal_donate_p}</div>
+                <div class="text-body">{modal_donate_p}</div>
             </div>
         </div>
         <script>
@@ -406,7 +426,7 @@ def generate_site(all_posts):
                 category_posts[cat] = []
             category_posts[cat].append(post)
 
-    # Генерация русской версии
+    # Русская версия
     total_pages = math.ceil(len(sorted_posts) / POSTS_PER_PAGE)
     for page_num in range(1, total_pages + 1):
         filename = 'index.html' if page_num == 1 else f'index_page{page_num}.html'
@@ -423,7 +443,7 @@ def generate_site(all_posts):
             with open(os.path.join(DATA_FOLDER, filename), 'w', encoding='utf-8') as f:
                 f.write(html_content)
 
-    # Генерация английской версии
+    # Английская версия
     for page_num in range(1, total_pages + 1):
         filename = 'index_en.html' if page_num == 1 else f'index_page{page_num}_en.html'
         html_content = generate_page(sorted_posts, page_num, total_pages, 'index', 'All Textures', category_posts, lang='en')
