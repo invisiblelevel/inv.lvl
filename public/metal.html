@@ -5,21 +5,18 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Металл</title>
-        <meta name="keywords" content="латунь, 8ktextures, медь, PBR, металл, metal, copper, grille, brass, texture, pbr textures, 3d assets">
+        <meta name="keywords" content="texture, латунь, metal, copper, brass, PBR, grille, медь, 8ktextures, металл, pbr textures, 3d assets">
         <meta name="description" content="Металл — бесплатные PBR текстуры и материалы для 3D художников.">
         <style>
             body { font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
             .site-wrapper { display: flex; max-width: 1550px; margin: 0 auto; gap: 20px; align-items: flex-start; justify-content: center; }
-            
             .sidebar { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; }
             .side-block { background: #2a2a2a; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, background 0.2s; text-align: center; }
             .side-block:hover { background: #333; transform: translateY(-2px); }
             .side-block h3 { margin-top: 0; color: #fff; font-size: 1.1em; }
             .side-block p { color: #aaa; font-size: 0.85em; margin-bottom: 15px; }
             .side-block .btn-link { display: inline-block; background: #4a6fa5; color: #fff; padding: 6px 15px; border-radius: 4px; font-size: 0.85em; }
-
             .main-content { flex: 1; min-width: 0; max-width: 1100px; }
-            
             .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
             .card { background: #2a2a2a; border-radius: 8px; overflow: hidden; transition: transform 0.2s; }
             .card:hover { transform: scale(1.02); }
@@ -32,24 +29,19 @@
             .card .info .tag { background: #3a3a3a; color: #8ab4f8; font-size: 0.75em; padding: 2px 6px; border-radius: 4px; }
             .card .info .link { display: inline-block; margin-top: 10px; background: #4a6fa5; color: #fff; padding: 5px 15px; border-radius: 4px; text-decoration: none; font-size: 0.9em; }
             .card .info .link:hover { background: #5a7fb5; }
-            
             .nav { text-align: center; margin-bottom: 20px; }
             .nav a { color: #4a6fa5; text-decoration: none; margin: 0 10px; display: inline-block; }
             .nav a:hover { text-decoration: underline; }
             .lang-btn { background: #333; padding: 4px 10px; border-radius: 4px; border: 1px solid #4a6fa5; font-weight: bold; }
-            
             .pagination { text-align: center; margin-top: 30px; }
             .pagination a, .pagination span { display: inline-block; padding: 8px 14px; margin: 0 4px; background: #2a2a2a; border-radius: 4px; color: #fff; text-decoration: none; }
             .pagination a:hover { background: #4a6fa5; }
             .pagination span.active { background: #4a6fa5; }
-
-            /* Модальные окна */
             .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
             .modal-content { background: #222; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.5); line-height: 1.5; }
             .close { position: absolute; right: 15px; top: 10px; font-size: 28px; cursor: pointer; color: #aaa; }
             .close:hover { color: #fff; }
             .modal-content code { background: #111; padding: 2px 6px; border-radius: 4px; color: #8ab4f8; font-family: monospace; }
-
             @media (max-width: 1100px) {
                 .site-wrapper { flex-direction: column; align-items: stretch; }
                 .sidebar { width: 100%; position: static; flex-direction: row; }
@@ -64,9 +56,7 @@
             <a href="metal_en.html" class="lang-btn">EN</a>
         </div>
         <h1 style="text-align:center; margin-bottom: 30px;">Металл</h1>
-        
         <div class="site-wrapper">
-            <!-- Левый блок: Информация -->
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('infoModal')">
                     <h3>ℹ️ Информация</h3>
@@ -74,8 +64,6 @@
                     <span class="btn-link">Открыть</span>
                 </div>
             </div>
-
-            <!-- Центральный блок с текстурами -->
             <div class="main-content">
                 <div class="gallery">
     
@@ -402,49 +390,123 @@
                 </div>
     <div class="pagination"><span class="active">1</span><a href="metal_page2.html">2</a></div>
             </div>
-
-            <!-- Правый блок: Поддержка -->
             <div class="sidebar">
                 <div class="side-block" onclick="openModal('donateModal')">
-                    <h3>🪙 {donate_title}</h3>
-                    <p>{donate_desc}</p>
-                    <span class="btn-link">{donate_btn}</span>
+                    <h3>🪙 Поддержка</h3>
+                    <p>Поддержать проект.</p>
+                    <span class="btn-link">Реквизиты</span>
                 </div>
             </div>
         </div>
-
-        <!-- Модальное окно: Информация -->
         <div id="infoModal" class="modal" onclick="closeModal(event, 'infoModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
-                <h2>{modal_info_h}</h2>
-                <div>{modal_info_p}</div>
+                <h2>Информация о проекте</h2>
+                <div><pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">========================================
+  TEXTURE PACK — README
+========================================
+
+Этот пак содержит набор PBR-текстур высокого качества.
+Все текстуры бесшовные (tileable) и готовы к использованию
+в игровых движках и 3D-редакторах.
+
+----------------------------------------
+  ЧТО ВНУТРИ ПАКА
+----------------------------------------
+
+Каждая текстура включает следующие карты:
+
+  _Albedo      — цвет (Base Color / Diffuse)
+  _Normal      — карта нормалей (OpenGL)
+  _Height      — карта высот (для parallax / displacement)
+  _AO          — ambient occlusion (затенение)
+  _Metallic    — металличность
+  _Smoothness  — гладкость (для Unity)
+  _ORM         — упакованная карта (R=AO, G=Roughness, B=Metallic)
+
+Разрешения: 8K.
+Формат: PNG (без потери качества).
+
+----------------------------------------
+  ВАЖНО: SMOOTHNESS vs ROUGHNESS
+----------------------------------------
+
+В паке лежит карта **_Smoothness** (гладкость).
+
+  Белый = гладкий / блестящий
+  Чёрный = шероховатый / матовый
+
+Эта карта подходит для Unity (Built-in, URP, HDRP).
+
+ЕСЛИ ВАМ НУЖНА КАРТА _Roughness (шероховатость):
+
+  В Blender, Substance Painter, Unreal Engine и некоторых
+  других движках используется карта Roughness — это
+  ПРОТИВОПОЛОЖНОСТЬ Smoothness.
+
+  Чтобы получить Roughness — просто инвертируйте карту
+  Smoothness в любом графическом редакторе:
+
+    GIMP:        Цвет → Инвертировать (Ctrl + I)
+    Photoshop:   Изображение → Коррекция → Инвертировать
+    Krita:       Фильтры → Коррекция → Инвертировать
+
+  Или используйте готовую карту _ORM (см. ниже).
+
+----------------------------------------
+  ORM-КАРТА (для Unreal Engine и др.)
+----------------------------------------
+
+В паке есть упакованная карта **_ORM.png**, где:
+  Красный канал  (R) = Ambient Occlusion
+  Зелёный канал  (G) = Roughness
+  Синий канал    (B) = Metallic
+
+Если ваш шейдер поддерживает ORM — просто подставьте
+эту карту вместо отдельных AO / Roughness / Metallic.
+
+----------------------------------------
+  ДЛЯ UNITY
+----------------------------------------
+
+Unity (Standard / URP / HDRP) ожидает Metallic и Smoothness
+в ОДНОЙ карте:
+  Красный канал  (R) = Metallic
+  Альфа-канал    (A) = Smoothness
+
+Если у вас нет готовой упакованной карты — можете собрать
+её вручную в GIMP / Photoshop, положив _Metallic в красный
+канал, а _Smoothness — в альфа-канал.
+
+Не забудьте в настройках текстуры в Unity отключить sRGB
+(Color Texture) для всех карт, кроме _Albedo.
+</pre></div>
             </div>
         </div>
-
-        <!-- Модальное окно: Поддержка -->
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('donateModal')">&times;</span>
-                <h2>{modal_donate_h}</h2>
-                <div>{modal_donate_p}</div>
+                <h2>Поддержать проект</h2>
+                <div><pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">Реквизиты для дон:  
+• BTC: bc1q2ka70s4vtmrskandqj8l4d6n3kdxyxa7kf3wf7
+• USDT (TRC-20): TUjY9p6oxKmeCQwNZwMfHqHdXuabaHpgT7
+• TONx: UQDWumGNNlnITx48WBzyI7Clb5wrpFRlJ3Se7xhfVKY5E2ad</pre></div>
             </div>
         </div>
-
         <script>
-            function openModal(id) {{ 
+            function openModal(id) { 
                 var m = document.getElementById(id);
                 if(m) m.style.display = 'flex'; 
-            }}
-            function closeModalDirect(id) {{ 
+            }
+            function closeModalDirect(id) { 
                 var m = document.getElementById(id);
                 if(m) m.style.display = 'none'; 
-            }}
-            function closeModal(e, id) {{ 
-                if(e.target.id === id) {{ 
+            }
+            function closeModal(e, id) { 
+                if(e.target.id === id) { 
                     document.getElementById(id).style.display = 'none'; 
-                }} 
-            }}
+                } 
+            }
         </script>
     </body>
     </html>
