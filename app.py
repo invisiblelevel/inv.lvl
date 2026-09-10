@@ -16,7 +16,7 @@ session_string = os.environ.get('SESSION_STRING', '')
 channel_link = os.environ.get('CHANNEL_LINK', '')
 
 # Ссылка на твой сайт — ВСТАВЬ СВОЮ!
-SITE_URL = 'https://lazycatdvrz.github.io/invisiblelevel'
+SITE_URL = 'https://invisiblelevel.github.io/inv.lvl/'
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
 
