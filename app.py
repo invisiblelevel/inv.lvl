@@ -59,6 +59,18 @@ def get_last_post_id(posts):
     return max(p.get('id', 0) for p in posts)
 
 def load_text_file(filename):
+    # Автоматически создаем файлы-заглушки, если их нет, чтобы текст всегда подтягивался
+    if not os.path.exists(filename):
+        if filename == 'Readme RU.txt':
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write("Бесплатный архив PBR-текстур высокого разрешения.\n\nВсе материалы доступны для свободного использования в личных и коммерческих проектах.")
+        elif filename == 'Readme EN.txt':
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write("Free high-resolution PBR texture archive.\n\nAll assets are free for personal and commercial projects.")
+        elif filename == 'Donate.txt':
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write("Поддержать проект:\n\nUSDT (TRC20): Ваш кошелек\nBoosty / DonationAlerts: ссылка")
+
     variants = [filename, filename.lower(), filename.replace(' ', ''), filename.replace(' ', '_')]
     for name in variants:
         if os.path.exists(name):
@@ -68,7 +80,7 @@ def load_text_file(filename):
                         return f.read()
                 except:
                     pass
-    return None
+    return "Информация загружается..."
 
 async def download_photo(message, filename):
     path = os.path.join(DATA_FOLDER, filename)
@@ -208,18 +220,11 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     
     readme_filename = 'Readme EN.txt' if lang == 'en' else 'Readme RU.txt'
     readme_text = load_text_file(readme_filename)
-    if readme_text:
-        modal_info_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + readme_text + '</pre>'
-    else:
-        modal_info_p = 'Free archive of PBR textures.' if lang == 'en' else 'Бесплатный архив PBR-текстур.'
+    modal_info_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + readme_text + '</pre>'
 
     modal_donate_h = 'Support Project' if lang == 'en' else 'Поддержать проект'
-    
-    donate_file_text = load_text_file('Donate.txt')
-    if donate_file_text:
-        modal_donate_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + donate_file_text + '</pre>'
-    else:
-        modal_donate_p = 'If these materials help in your work, you can support the archive.' if lang == 'en' else 'Если материалы помогают в работе, можешь поддержать архив.'
+    donate_text = load_text_file('Donate.txt')
+    modal_donate_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + donate_text + '</pre>'
 
     home_text = 'Home' if lang == 'en' else 'Главная'
 
