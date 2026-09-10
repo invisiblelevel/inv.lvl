@@ -12,7 +12,7 @@ session_string = os.environ.get('SESSION_STRING', '')
 channel_link = os.environ.get('CHANNEL_LINK', '')
 
 CATEGORY_HASHTAGS = ['terrain', 'metal', 'wood', 'brick', 'concrete', 'stone', 'tile', 'fabric', 'organic', 'plastic', 'leather']
-POSTS_PER_PAGE = 30
+POSTS_PER_PAGE = 32
 # ===============================================================
 
 DATA_FOLDER = 'public'
@@ -43,7 +43,6 @@ def get_last_post_id(posts):
     return max(p.get('id', 0) for p in posts)
 
 def load_text_file(filename):
-    # Проверяем точное имя и основные варианты на случай расхождений регистра
     variants = [filename, filename.lower(), filename.replace(' ', ''), filename.replace(' ', '_')]
     for name in variants:
         if os.path.exists(name):
@@ -190,21 +189,21 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
 
     modal_info_h = 'About Project' if lang == 'en' else 'Информация о проекте'
     
-    # Читаем Readme RU.txt или Readme EN.txt
+    # Загружаем Readme
     readme_filename = 'Readme EN.txt' if lang == 'en' else 'Readme RU.txt'
     readme_text = load_text_file(readme_filename)
 
     if readme_text:
-        modal_info_p = f'<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">{readme_text}</pre>'
+        modal_info_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + readme_text + '</pre>'
     else:
         modal_info_p = 'Free archive of PBR textures.' if lang == 'en' else 'Бесплатный архив PBR-текстур.'
 
     modal_donate_h = 'Support Project' if lang == 'en' else 'Поддержать проект'
     
-    # Читаем Donate.txt
+    # Загружаем Donate
     donate_file_text = load_text_file('Donate.txt')
     if donate_file_text:
-        modal_donate_p = f'<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">{donate_file_text}</pre>'
+        modal_donate_p = '<pre style="white-space: pre-wrap; font-family: inherit; margin: 0; text-align: left;">' + donate_file_text + '</pre>'
     else:
         modal_donate_p = 'If these materials help in your work, you can support the archive.' if lang == 'en' else 'Если материалы помогают в работе, можешь поддержать архив.'
 
@@ -418,9 +417,8 @@ async def main():
             save_all_posts(all_posts)
             generate_site(all_posts)
         else:
-            print("ℹ️ База актуальна, генерация страниц не требуется.")
-            if not os.path.exists(os.path.join(DATA_FOLDER, "index.html")) or not os.path.exists(os.path.join(DATA_FOLDER, "index_en.html")):
-                generate_site(all_posts)
+            print("ℹ️ База актуальна, генерирую страницы со свежими файлами текста...")
+            generate_site(all_posts)
     finally:
         await client.disconnect()
         print("🔒 Сессия закрыта")
