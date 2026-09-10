@@ -29,9 +29,9 @@ Format: PNG (lossless).
 
 This pack includes a **_Smoothness** map. or **_Roughness**
 
-===============================================ATTENTION!==========================================================
+==========================ATTENTION!=================================
 If you experience problems with this map, try inverting the colors.
-===================================================================================================================
+=====================================================================
 
 This map is ready to use in Unity (Built-in, URP, HDRP).
 
