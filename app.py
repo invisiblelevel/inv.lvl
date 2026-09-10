@@ -6,6 +6,7 @@ import html
 import math
 from telethon import TelegramClient
 from telethon.sessions import StringSession
+from telethon.errors import FloodWaitError
 
 # ===================== ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ =====================
 api_id = int(os.environ.get('API_ID', 0))
@@ -127,12 +128,18 @@ def load_text_file(filename):
 
 
 async def download_photo(message, filename):
+    """Скачивает фото с паузой, чтобы не триггернуть антифлуд Telegram."""
     path = os.path.join(DATA_FOLDER, filename)
     if os.path.exists(path):
         return path
     try:
         await client.download_media(message.media, file=path)
+        await asyncio.sleep(1.5)  # Пауза между скачиваниями
         return path
+    except FloodWaitError as e:
+        print(f"⏳ Telegram просит подождать {e.seconds} секунд")
+        await asyncio.sleep(e.seconds)
+        return None
     except Exception as e:
         print(f"Ошибка скачивания: {e}")
         return None
@@ -495,9 +502,7 @@ async def main():
             generate_site(all_posts)
             git_commit_and_push()
         else:
-            print("ℹ️ База актуальна, генерирую страницы со свежими файлами текста...")
-            generate_site(all_posts)
-            git_commit_and_push()
+            print("ℹ️ Новых постов нет, ничего не меняю")
     finally:
         await client.disconnect()
         print("🔒 Сессия закрыта")
