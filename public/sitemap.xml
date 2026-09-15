@@ -37,13 +37,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://invisiblelevel.github.io/inv.lvl//wood.html</loc>
-    <lastmod>2026-09-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://invisiblelevel.github.io/inv.lvl//concrete.html</loc>
+    <loc>https://invisiblelevel.github.io/inv.lvl//tile.html</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -56,6 +50,18 @@
   </url>
   <url>
     <loc>https://invisiblelevel.github.io/inv.lvl//metal_page2.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//wood.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//concrete.html</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -103,13 +109,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://invisiblelevel.github.io/inv.lvl//wood_en.html</loc>
-    <lastmod>2026-09-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://invisiblelevel.github.io/inv.lvl//concrete_en.html</loc>
+    <loc>https://invisiblelevel.github.io/inv.lvl//tile_en.html</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -122,6 +122,18 @@
   </url>
   <url>
     <loc>https://invisiblelevel.github.io/inv.lvl//metal_page2_en.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//wood_en.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//concrete_en.html</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
