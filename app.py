@@ -4,7 +4,6 @@ import asyncio
 import subprocess
 import html
 import math
-import re
 from datetime import datetime
 from telethon import TelegramClient
 from telethon.sessions import StringSession
@@ -17,7 +16,6 @@ except ImportError:
     PIL_AVAILABLE = False
     print("⚠️ Pillow не установлен — оптимизация картинок отключена")
 
-# ===================== ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ =====================
 api_id = int(os.environ.get('API_ID', 0))
 api_hash = os.environ.get('API_HASH', '')
 session_string = os.environ.get('SESSION_STRING', '')
@@ -68,15 +66,12 @@ if not session_string:
 client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
 
-# ===================== УТИЛИТЫ =====================
-
 def load_all_posts():
     if os.path.exists(POSTS_JSON):
         try:
             with open(POSTS_JSON, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 if not isinstance(data, list):
-                    print("⚠️ posts.json не список — игнорирую")
                     return []
                 return data
         except Exception as e:
@@ -181,8 +176,6 @@ def optimize_image(path):
         print(f"⚠️ Не удалось оптимизировать {path}: {e}")
 
 
-# ===================== СКАЧИВАНИЕ =====================
-
 async def download_photo_safe(message, filename):
     path = os.path.join(IMAGES_FOLDER, filename)
     if os.path.exists(path):
@@ -208,8 +201,6 @@ async def download_photo_safe(message, filename):
     print(f"❌ Не удалось скачать {filename} после {MAX_RETRIES} попыток")
     return False
 
-
-# ===================== ПАРСИНГ =====================
 
 async def parse_channel(existing_posts):
     entity = await client.get_entity(channel_link)
@@ -290,8 +281,6 @@ async def parse_channel(existing_posts):
     print(f"✅ Новых постов: {len(unique_posts)}")
     return unique_posts
 
-
-# ===================== ГЕНЕРАЦИЯ HTML =====================
 
 def get_category(post):
     for tag in post.get('hashtags', []):
@@ -384,7 +373,6 @@ def build_seo_block(title, description, keywords, url, image_url, lang='ru'):
         <meta name="author" content="InvisibleLevel">
         <link rel="canonical" href="{safe_url}">
 
-        <!-- Open Graph -->
         <meta property="og:type" content="website">
         <meta property="og:title" content="{safe_title}">
         <meta property="og:description" content="{safe_desc}">
@@ -394,13 +382,11 @@ def build_seo_block(title, description, keywords, url, image_url, lang='ru'):
         <meta property="og:locale" content="{locale}">
         <meta property="og:locale:alternate" content="{alt_locale}">
 
-        <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{safe_title}">
         <meta name="twitter:description" content="{safe_desc}">
         <meta name="twitter:image" content="{safe_image}">
 
-        <!-- Schema.org -->
         <script type="application/ld+json">
         {{
             "@context": "https://schema.org",
@@ -605,8 +591,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     return html_page
 
 
-# ===================== SEO ФАЙЛЫ =====================
-
 def generate_robots_txt():
     robots = f"""User-agent: *
 Allow: /
@@ -637,8 +621,6 @@ def generate_sitemap(all_pages):
         f.write(sitemap)
     print(f"✅ sitemap.xml создан ({len(all_pages)} страниц)")
 
-
-# ===================== ГЕНЕРАЦИЯ САЙТА =====================
 
 def generate_site(all_posts):
     if not all_posts:
@@ -716,10 +698,55 @@ def generate_site(all_posts):
     print(f"✅ Сайт пересобран (RU + EN) + SEO файлы в папке {DATA_FOLDER}")
 
 
-# ===================== GIT =====================
-
 def git_commit_and_push():
     try:
         print("🔄 Отправляю изменения в репозиторий...")
         subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True)
-        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply
+        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
+
+        subprocess.run(["git", "add", "posts.json", "public/"], check=True)
+        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
+
+        if status.stdout.strip():
+            subprocess.run(
+                ["git", "commit", "-m", "Auto-update posts and images [skip ci]"],
+                check=True
+            )
+            subprocess.run(["git", "push"], check=True)
+            print("✅ Файлы запушены в репозиторий!")
+        else:
+            print("ℹ️ Нет изменений для коммита.")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️ Git ошибка: {e}")
+    except Exception as e:
+        print(f"⚠️ Ошибка при автокоммите: {e}")
+
+
+async def main():
+    print("🔍 Проверяю канал...")
+    all_posts = load_all_posts()
+    print(f"📚 Загружено постов: {len(all_posts)}")
+
+    print("👤 Авторизуюсь...")
+    await client.start()
+
+    try:
+        new_posts = await parse_channel(all_posts)
+
+        if new_posts:
+            all_posts.extend(new_posts)
+            all_posts.sort(key=lambda x: x.get('id', 0))
+            save_all_posts(all_posts)
+            print(f"💾 Всего постов после обновления: {len(all_posts)}")
+
+        print("🏗️ Пересобираю сайт...")
+        generate_site(all_posts)
+        git_commit_and_push()
+
+    finally:
+        await client.disconnect()
+        print("🔒 Сессия закрыта")
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
