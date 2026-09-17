@@ -30,7 +30,6 @@ CATEGORY_HASHTAGS = [
     'tile', 'fabric', 'organic', 'plastic', 'leather'
 ]
 
-# Фиксированный порядок категорий в меню
 CATEGORY_ORDER = [
     'terrain', 'metal', 'wood', 'brick', 'concrete', 'stone',
     'tile', 'fabric', 'organic', 'plastic', 'leather', 'other'
@@ -51,18 +50,20 @@ CATEGORY_NAMES_EN = {
 }
 
 POSTS_PER_PAGE = 32
-DOWNLOAD_DELAY = 3.0          # пауза между скачиваниями
-MAX_RETRIES = 3               # попыток скачивания
-MAX_POSTS_PER_RUN = 100       # ограничение за один запуск (защита от залпа)
-IMAGE_MAX_WIDTH = 800         # ширина превью
-IMAGE_QUALITY = 82            # качество JPEG
+DOWNLOAD_DELAY = 3.0
+MAX_RETRIES = 3
+MAX_POSTS_PER_RUN = 100
+IMAGE_MAX_WIDTH = 800
+IMAGE_QUALITY = 82
 
 DATA_FOLDER = 'public'
+IMAGES_FOLDER = os.path.join(DATA_FOLDER, 'images')
 os.makedirs(DATA_FOLDER, exist_ok=True)
+os.makedirs(IMAGES_FOLDER, exist_ok=True)
 POSTS_JSON = 'posts.json'
 
 if not session_string:
-    raise ValueError("❌ SESSION_STRING не задан. Добавь секрет SESSION_STRING в настройках репозитория.")
+    raise ValueError("❌ SESSION_STRING не задан.")
 
 client = TelegramClient(StringSession(session_string), api_id, api_hash)
 
@@ -96,7 +97,6 @@ def escape_html(text):
 
 
 def fix_typos(text):
-    """Чиним типичные опечатки в текстах постов."""
     if not text:
         return text
     fixes = {
@@ -111,16 +111,13 @@ def fix_typos(text):
 
 
 def is_valid_tag(tag):
-    """Отсеиваем мусорные теги типа #1, #2, #8ktextures оставляем."""
     if not tag or not tag.startswith('#'):
         return False
     body = tag[1:].strip()
     if not body:
         return False
-    # чисто цифровые теги — мусор
     if body.isdigit():
         return False
-    # теги из одной буквы — мусор
     if len(body) < 2:
         return False
     return True
@@ -169,7 +166,6 @@ def load_text_file(filename):
 
 
 def optimize_image(path):
-    """Сжимает превью, чтобы экономить место в артефакте."""
     if not PIL_AVAILABLE:
         return
     try:
@@ -188,8 +184,7 @@ def optimize_image(path):
 # ===================== СКАЧИВАНИЕ =====================
 
 async def download_photo_safe(message, filename):
-    """Скачивает фото с ретраями и паузами. Возвращает True/False."""
-    path = os.path.join(DATA_FOLDER, filename)
+    path = os.path.join(IMAGES_FOLDER, filename)
     if os.path.exists(path):
         return True
 
@@ -217,16 +212,11 @@ async def download_photo_safe(message, filename):
 # ===================== ПАРСИНГ =====================
 
 async def parse_channel(existing_posts):
-    """
-    Собирает новые посты. Дедупликация по id вместо хрупкого min_id.
-    Останавливается, если скачивание упало — чтобы не терять посты.
-    """
     entity = await client.get_entity(channel_link)
     username = entity.username
     existing_ids = {p['id'] for p in existing_posts}
     last_known = max(existing_ids, default=0)
 
-    # запас 50 ID назад — ловим посты, которые могли быть пропущены
     min_id = max(0, last_known - 50)
     print(f"📌 Последний известный ID: {last_known}, начинаем с min_id={min_id}")
 
@@ -245,16 +235,15 @@ async def parse_channel(existing_posts):
     current_post = None
 
     for msg in new_messages:
-        # Фото = начало нового поста
         if msg.photo:
             photo_filename = f"{msg.id}_preview.jpg"
             ok = await download_photo_safe(msg, photo_filename)
             if not ok:
                 print(f"🛑 Останавливаюсь: не скачалось фото {msg.id}")
-                break  # не теряем последующие посты
+                break
 
             current_post = {
-                'id': msg.id,              # временно = id фото
+                'id': msg.id,
                 'photo_id': msg.id,
                 'photo': photo_filename,
                 'text': "",
@@ -264,7 +253,6 @@ async def parse_channel(existing_posts):
             }
             new_posts.append(current_post)
 
-        # Документ = архив, завершает пост
         elif msg.document and current_post is not None:
             current_post['archive_id'] = msg.id
             current_post['archive_link'] = f"https://t.me/{username}/{msg.id}"
@@ -283,19 +271,15 @@ async def parse_channel(existing_posts):
                 text_joined = '\n'.join(lines)
                 current_post['text'] = fix_typos(text_joined)
 
-            # Основной ID поста = ID архива (для сортировки)
             current_post['id'] = max(current_post['id'], msg.id)
 
-    # Оставляем только посты с фото и ссылкой на архив
     valid_posts = [
         p for p in new_posts
         if p.get('photo') and p.get('archive_link')
     ]
 
-    # Дедупликация по id
     valid_posts = [p for p in valid_posts if p['id'] not in existing_ids]
 
-    # На всякий случай — дедупликация внутри пачки
     seen = set()
     unique_posts = []
     for p in valid_posts:
@@ -323,13 +307,11 @@ def render_card(post, lang='ru'):
     title = escape_html(lines[0]) if lines else ("Texture" if lang == 'en' else "Текстура")
     desc = escape_html('\n'.join(lines[1:])) if len(lines) > 1 else ''
 
-    # Fallback-описание, если автор поста его не дал
     if not desc:
         desc = ("8K PBR texture, tileable, free download"
                 if lang == 'en' else
                 "PBR текстура 8K, бесшовная, скачать бесплатно")
 
-    # Чистим мусорные теги
     clean_tags = [t for t in post.get('hashtags', []) if is_valid_tag(t)]
     tags_html = ''
     if clean_tags:
@@ -338,13 +320,15 @@ def render_card(post, lang='ru'):
         ) + '</div>'
 
     title_attr = "Open in full resolution" if lang == 'en' else "Открыть в полном разрешении"
+
+    photo_src = f'images/{post["photo"]}' if post.get('photo') else ''
     img_tag = (
-        f'<img src="{post["photo"]}" alt="{title} — PBR texture" loading="lazy">'
-        if post.get('photo') else ''
+        f'<img src="{photo_src}" alt="{title} — PBR texture" loading="lazy">'
+        if photo_src else ''
     )
     card_img = (
-        f'<a href="{post["photo"]}" target="_blank" title="{title_attr}">{img_tag}</a>'
-        if post.get('photo') else ''
+        f'<a href="{photo_src}" target="_blank" title="{title_attr}">{img_tag}</a>'
+        if photo_src else ''
     )
     btn_text = 'Download Archive' if lang == 'en' else 'Скачать архив'
 
@@ -435,7 +419,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     end = min(start + POSTS_PER_PAGE, len(posts))
     page_posts = posts[start:end]
 
-    # Теги для keywords: собираем со всей категории, а не только с текущей страницы
     all_tags = set()
     for p in posts:
         for t in p.get('hashtags', []):
@@ -450,7 +433,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     first_photo = None
     for p in page_posts:
         if p.get('photo'):
-            first_photo = f"{SITE_URL}/{p['photo']}"
+            first_photo = f"{SITE_URL}/images/{p['photo']}"
             break
 
     if lang == 'ru':
@@ -465,7 +448,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     seo_block = build_seo_block(seo_title, seo_desc, keywords_str, url, first_photo, lang)
 
     home_link = f'index{suffix}.html'
-    # Переключение языка сохраняет номер страницы
     other_lang_link = (
         f'{base_name}{page_suffix}.html' if lang == 'en'
         else f'{base_name}{page_suffix}_en.html'
@@ -546,7 +528,6 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
             <a href="{home_link}">{home_text}</a>
     '''
 
-    # Фиксированный порядок категорий
     for cat in CATEGORY_ORDER:
         if cat in category_posts:
             cat_filename = f'{cat}{suffix}.html'
@@ -664,24 +645,18 @@ def generate_site(all_posts):
         print("ℹ️ Нет постов для генерации сайта")
         return
 
-    # Сортируем по id (id = id архива, монотонно растёт)
     sorted_posts = sorted(all_posts, key=lambda x: x.get('id', 0), reverse=True)
 
-    # Группируем по категориям
     category_posts = {}
-    uncategorized = []
     for post in sorted_posts:
         cat = get_category(post)
         if cat:
             category_posts.setdefault(cat, []).append(post)
-        else:
-            uncategorized.append(post)
 
     all_pages = set()
     all_pages.add('index.html')
     all_pages.add('index_en.html')
 
-    # ---- RU версия ----
     total_pages = max(1, math.ceil(len(sorted_posts) / POSTS_PER_PAGE))
     for page_num in range(1, total_pages + 1):
         filename = 'index.html' if page_num == 1 else f'index_page{page_num}.html'
@@ -709,7 +684,6 @@ def generate_site(all_posts):
                 f.write(html_content)
             all_pages.add(filename)
 
-    # ---- EN версия ----
     for page_num in range(1, total_pages + 1):
         filename = 'index_en.html' if page_num == 1 else f'index_page{page_num}_en.html'
         html_content = generate_page(
@@ -748,54 +722,4 @@ def git_commit_and_push():
     try:
         print("🔄 Отправляю изменения в репозиторий...")
         subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True)
-        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True)
-
-        subprocess.run(["git", "add", "posts.json", "public/"], check=True)
-        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
-
-        if status.stdout.strip():
-            subprocess.run(
-                ["git", "commit", "-m", "Auto-update posts and images [skip ci]"],
-                check=True
-            )
-            subprocess.run(["git", "push"], check=True)
-            print("✅ Файлы запушены в репозиторий!")
-        else:
-            print("ℹ️ Нет изменений для коммита.")
-    except subprocess.CalledProcessError as e:
-        print(f"⚠️ Git ошибка: {e}")
-    except Exception as e:
-        print(f"⚠️ Ошибка при автокоммите: {e}")
-
-
-# ===================== MAIN =====================
-
-async def main():
-    print("🔍 Проверяю канал...")
-    all_posts = load_all_posts()
-    print(f"📚 Загружено постов: {len(all_posts)}")
-
-    print("👤 Авторизуюсь...")
-    await client.start()
-
-    try:
-        new_posts = await parse_channel(all_posts)
-
-        if new_posts:
-            all_posts.extend(new_posts)
-            # Пересортировка по id на всякий случай
-            all_posts.sort(key=lambda x: x.get('id', 0))
-            save_all_posts(all_posts)
-            print(f"💾 Всего постов после обновления: {len(all_posts)}")
-
-        print("🏗️ Пересобираю сайт...")
-        generate_site(all_posts)
-        git_commit_and_push()
-
-    finally:
-        await client.disconnect()
-        print("🔒 Сессия закрыта")
-
-
-if __name__ == '__main__':
-    asyncio.run(main())
+        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply
