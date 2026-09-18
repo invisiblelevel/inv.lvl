@@ -1910,5 +1910,65 @@
       "#кожа",
       "#8ktextures"
     ]
+  },
+  {
+    "id": 394,
+    "photo_id": 393,
+    "photo": "393_preview.jpg",
+    "text": "Leaves PBR Texture Pack №2 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/394",
+    "archive_id": 394,
+    "hashtags": [
+      "#organic",
+      "#texture",
+      "#PBR",
+      "#листья",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 396,
+    "photo_id": 395,
+    "photo": "395_preview.jpg",
+    "text": "Grass PBR Texture Pack №1 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/396",
+    "archive_id": 396,
+    "hashtags": [
+      "#organic",
+      "#texture",
+      "#PBR",
+      "#трава",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 398,
+    "photo_id": 397,
+    "photo": "397_preview.jpg",
+    "text": "Moss PBR Texture Pack № 4 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/398",
+    "archive_id": 398,
+    "hashtags": [
+      "#organic",
+      "#texture",
+      "#PBR",
+      "#мох",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 400,
+    "photo_id": 399,
+    "photo": "399_preview.jpg",
+    "text": "Moss PBR Texture Pack № 5 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/400",
+    "archive_id": 400,
+    "hashtags": [
+      "#organic",
+      "#texture",
+      "#PBR",
+      "#мох",
+      "#8ktextures"
+    ]
   }
 ]
