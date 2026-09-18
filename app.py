@@ -25,26 +25,28 @@ SITE_URL = 'https://invisiblelevel.github.io/inv.lvl/'
 
 CATEGORY_HASHTAGS = [
     'terrain', 'metal', 'wood', 'brick', 'concrete', 'stone',
-    'tile', 'fabric', 'organic', 'plastic', 'leather'
+    'tile', 'fabric', 'organic', 'plastic', 'leather', 'masonry'
 ]
 
 CATEGORY_ORDER = [
     'terrain', 'metal', 'wood', 'brick', 'concrete', 'stone',
-    'tile', 'fabric', 'organic', 'plastic', 'leather', 'other'
+    'masonry', 'tile', 'fabric', 'organic', 'plastic', 'leather', 'other'
 ]
 
 CATEGORY_NAMES_RU = {
     'terrain': 'Ландшафт', 'metal': 'Металл', 'wood': 'Дерево',
     'brick': 'Кирпич', 'concrete': 'Бетон', 'stone': 'Камень',
-    'tile': 'Плитка', 'fabric': 'Ткань', 'organic': 'Органика',
-    'plastic': 'Пластик', 'other': 'Другое', 'leather': 'Кожа'
+    'masonry': 'Кладка', 'tile': 'Плитка', 'fabric': 'Ткань',
+    'organic': 'Органика', 'plastic': 'Пластик', 'other': 'Другое',
+    'leather': 'Кожа'
 }
 
 CATEGORY_NAMES_EN = {
     'terrain': 'Terrain', 'metal': 'Metal', 'wood': 'Wood',
     'brick': 'Brick', 'concrete': 'Concrete', 'stone': 'Stone',
-    'tile': 'Tile', 'fabric': 'Fabric', 'organic': 'Organic',
-    'plastic': 'Plastic', 'other': 'Other', 'leather': 'Leather'
+    'masonry': 'Masonry', 'tile': 'Tile', 'fabric': 'Fabric',
+    'organic': 'Organic', 'plastic': 'Plastic', 'other': 'Other',
+    'leather': 'Leather'
 }
 
 POSTS_PER_PAGE = 32
@@ -467,6 +469,8 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
         {seo_block}
         <style>
             body {{ font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }}
+            .header-banner {{ max-width: 1550px; margin: 0 auto 20px auto; text-align: center; }}
+            .header-banner img {{ max-width: 100%; height: auto; border-radius: 10px; display: block; margin: 0 auto; }}
             .site-wrapper {{ display: flex; max-width: 1550px; margin: 0 auto; gap: 20px; align-items: flex-start; justify-content: center; }}
             .sidebar {{ width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; }}
             .side-block {{ background: #2a2a2a; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, background 0.2s; text-align: center; }}
@@ -510,6 +514,11 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
         </style>
     </head>
     <body>
+        <div class="header-banner">
+            <a href="{home_link}">
+                <img src="header.png" alt="InvisibleLevel Textures">
+            </a>
+        </div>
         <div class="nav">
             <a href="{home_link}">{home_text}</a>
     '''
