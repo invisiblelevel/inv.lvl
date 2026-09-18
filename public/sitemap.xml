@@ -109,6 +109,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//masonry.html</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//masonry_en.html</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://invisiblelevel.github.io/inv.lvl//metal.html</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
