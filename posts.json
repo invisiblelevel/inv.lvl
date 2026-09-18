@@ -1790,5 +1790,125 @@
       "#листья",
       "#8ktextures"
     ]
+  },
+  {
+    "id": 378,
+    "photo_id": 377,
+    "photo": "377_preview.jpg",
+    "text": "Tile PBR Texture Pack №5 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/378",
+    "archive_id": 378,
+    "hashtags": [
+      "#tile",
+      "#texture",
+      "#PBR",
+      "#плитка",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 380,
+    "photo_id": 379,
+    "photo": "379_preview.jpg",
+    "text": "Tile PBR Texture Pack №6 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/380",
+    "archive_id": 380,
+    "hashtags": [
+      "#tile",
+      "#texture",
+      "#PBR",
+      "#плитка",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 382,
+    "photo_id": 381,
+    "photo": "381_preview.jpg",
+    "text": "Tile PBR Texture Pack №7 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/382",
+    "archive_id": 382,
+    "hashtags": [
+      "#tile",
+      "#texture",
+      "#PBR",
+      "#плитка",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 384,
+    "photo_id": 383,
+    "photo": "383_preview.jpg",
+    "text": "Tile PBR Texture Pack №8 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/384",
+    "archive_id": 384,
+    "hashtags": [
+      "#tile",
+      "#texture",
+      "#PBR",
+      "#плитка",
+      "#8ktexture"
+    ]
+  },
+  {
+    "id": 386,
+    "photo_id": 385,
+    "photo": "385_preview.jpg",
+    "text": "Leather PBR Texture Pack №4 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/386",
+    "archive_id": 386,
+    "hashtags": [
+      "#leather",
+      "#texture",
+      "#PBR",
+      "#кожа",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 388,
+    "photo_id": 387,
+    "photo": "387_preview.jpg",
+    "text": "Leather PBR Texture Pack №5 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/388",
+    "archive_id": 388,
+    "hashtags": [
+      "#leather",
+      "#texture",
+      "#PBR",
+      "#кожа",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 390,
+    "photo_id": 389,
+    "photo": "389_preview.jpg",
+    "text": "Leather PBR Texture Pack №6 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/390",
+    "archive_id": 390,
+    "hashtags": [
+      "#leather",
+      "#texture",
+      "#PBR",
+      "#кожа",
+      "#8ktexture"
+    ]
+  },
+  {
+    "id": 392,
+    "photo_id": 391,
+    "photo": "391_preview.jpg",
+    "text": "Leather PBR Texture Pack №7 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/392",
+    "archive_id": 392,
+    "hashtags": [
+      "#leather",
+      "#texture",
+      "#PBR",
+      "#кожа",
+      "#8ktextures"
+    ]
   }
 ]
