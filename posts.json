@@ -2075,5 +2075,67 @@
       "#кирпич",
       "#8ktextures"
     ]
+  },
+  {
+    "id": 416,
+    "photo_id": 415,
+    "photo": "415_preview.jpg",
+    "text": "Rubber PBR Texture Pack №1  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/416",
+    "archive_id": 416,
+    "hashtags": [
+      "#other",
+      "#rubber",
+      "#texture",
+      "#PBR",
+      "#резина",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 418,
+    "photo_id": 417,
+    "photo": "417_preview.jpg",
+    "text": "Rubber PBR Texture Pack №2  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/418",
+    "archive_id": 418,
+    "hashtags": [
+      "#other",
+      "#rubber",
+      "#texture",
+      "#PBR",
+      "#резина",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 420,
+    "photo_id": 419,
+    "photo": "419_preview.jpg",
+    "text": "Metal PBR Texture Pack №37  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/420",
+    "archive_id": 420,
+    "hashtags": [
+      "#metal",
+      "#texture",
+      "#PBR",
+      "#металл",
+      "#8ktextures"
+    ]
+  },
+  {
+    "id": 422,
+    "photo_id": 421,
+    "photo": "421_preview.jpg",
+    "text": "Metal PBR Texture Pack №38 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/422",
+    "archive_id": 422,
+    "hashtags": [
+      "#metal",
+      "#texture",
+      "#PBR",
+      "#металл",
+      "#8ktextures"
+    ]
   }
 ]
