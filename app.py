@@ -25,7 +25,7 @@ SITE_URL = 'https://invisiblelevel.github.io/inv.lvl/'
 
 CATEGORY_HASHTAGS = [
     'terrain', 'metal', 'wood', 'brick', 'concrete', 'stone',
-    'tile', 'fabric', 'organic', 'plastic', 'leather', 'masonry'
+    'tile', 'fabric', 'organic', 'plastic', 'leather', 'masonry', 'other'
 ]
 
 CATEGORY_ORDER = [
@@ -470,7 +470,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
         <style>
             body {{ font-family: sans-serif; background: #1a1a1a; color: #fff; margin: 0; padding: 20px; }}
             .header-banner {{ max-width: 1550px; margin: 0 auto 20px auto; text-align: center; }}
-            .header-banner img {{ width: 100%; max-height: 240px; object-fit: cover; border-radius: 10px; display: block; margin: 0 auto; }}
+            .header-banner img {{ width: 100%; max-height: 140px; object-fit: cover; border-radius: 10px; display: block; margin: 0 auto; }}
             .site-wrapper {{ display: flex; max-width: 1550px; margin: 0 auto; gap: 20px; align-items: flex-start; justify-content: center; }}
             .sidebar {{ width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; }}
             .side-block {{ background: #2a2a2a; border-radius: 8px; padding: 20px; cursor: pointer; transition: transform 0.2s, background 0.2s; text-align: center; }}
