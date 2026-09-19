@@ -169,6 +169,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//other.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//other_en.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://invisiblelevel.github.io/inv.lvl//terrain.html</loc>
     <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>
