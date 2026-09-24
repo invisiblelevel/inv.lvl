@@ -2859,5 +2859,82 @@
       "#godot",
       "#gamedev"
     ]
+  },
+  {
+    "id": 509,
+    "photo_id": 508,
+    "photo": "508_preview.webp",
+    "text": "Concrete PBR Texture Pack №3 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/509",
+    "archive_id": 509,
+    "hashtags": [
+      "#concrete",
+      "#texture",
+      "#PBR",
+      "#бетон",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 511,
+    "photo_id": 510,
+    "photo": "510_preview.webp",
+    "text": "Concrete PBR Texture Pack №4 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/511",
+    "archive_id": 511,
+    "hashtags": [
+      "#concrete",
+      "#texture",
+      "#PBR",
+      "#бетон",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 513,
+    "photo_id": 512,
+    "photo": "512_preview.webp",
+    "text": "Concrete PBR Texture Pack №5 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/513",
+    "archive_id": 513,
+    "hashtags": [
+      "#concrete",
+      "#texture",
+      "#PBR",
+      "#бетон",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamede"
+    ]
+  },
+  {
+    "id": 515,
+    "photo_id": 514,
+    "photo": "514_preview.webp",
+    "text": "Cobblestone PBR Texture Pack №2  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/515",
+    "archive_id": 515,
+    "hashtags": [
+      "#other",
+      "#texture",
+      "#cobblestone",
+      "#PBR",
+      "#брусчатка",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
   }
 ]
