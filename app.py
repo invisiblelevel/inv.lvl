@@ -765,6 +765,7 @@ def generate_texture_page(post, category_posts, lang='ru'):
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="icon.ico">
         {seo_block}
         <style>{css}</style>
     </head>
@@ -976,6 +977,7 @@ def generate_page(posts, page_num, total_pages, base_name, title, category_posts
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="icon.ico">
         {seo_block}
         <style>{css}</style>
     </head>
