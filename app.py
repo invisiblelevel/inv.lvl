@@ -771,7 +771,7 @@ def generate_texture_page(post, category_posts, lang='ru'):
     <body>
         <div class="header-banner">
             <a href="{home_link}">
-                <img src="header.png" alt="InvisibleLevel Textures">
+                <img src="header.webp" width="1550" height="234" loading="eager" fetchpriority="high" alt="InvisibleLevel Textures">
             </a>
         </div>
         <div class="nav">
