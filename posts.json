@@ -2936,5 +2936,65 @@
       "#blender",
       "#gamedev"
     ]
+  },
+  {
+    "id": 517,
+    "photo_id": 516,
+    "photo": "516_preview.webp",
+    "text": "Cobblestone PBR Texture Pack №3  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/517",
+    "archive_id": 517,
+    "hashtags": [
+      "#masonry",
+      "#texture",
+      "#cobblestone",
+      "#PBR",
+      "#брусчатка",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 519,
+    "photo_id": 518,
+    "photo": "518_preview.webp",
+    "text": "Grass PBR Texture Pack №2  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/519",
+    "archive_id": 519,
+    "hashtags": [
+      "#organic",
+      "#texture",
+      "#grass",
+      "#PBR",
+      "#трава",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 521,
+    "photo_id": 520,
+    "photo": "520_preview.webp",
+    "text": "Grass PBR Texture Pack №3  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/521",
+    "archive_id": 521,
+    "hashtags": [
+      "#organic",
+      "#texture",
+      "#grass",
+      "#PBR",
+      "#трава",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
   }
 ]
