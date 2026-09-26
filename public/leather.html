@@ -93,6 +93,16 @@
             .texture-page .btn-download:hover { background: #5a7fb5; }
             .texture-page .btn-back { display: inline-block; background: #333; color: #fff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 1.1em; transition: background 0.2s; }
             .texture-page .btn-back:hover { background: #444; }
+            .made-with { margin-top: 28px; padding-top: 22px; border-top: 1px solid #333; }
+            .made-with-label { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+            .made-with-text { color: #aaa; font-size: 0.95em; line-height: 1.6; margin: 0 0 14px 0; }
+            .made-with-text strong { color: #fff; }
+            .btn-albedolizer { display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(135deg, #4a6fa5, #6a8fc5); color: #fff; padding: 11px 22px; border-radius: 8px; text-decoration: none; font-size: 0.95em; font-weight: 600; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(74, 111, 165, 0.3); }
+            .btn-albedolizer:hover { background: linear-gradient(135deg, #5a7fb5, #7a9fd5); box-shadow: 0 4px 12px rgba(74, 111, 165, 0.5); transform: translateY(-1px); }
+            .btn-albedolizer svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+            .texture-processed { margin-top: 32px; padding-top: 18px; border-top: 1px solid #2a2a2a; color: #777; font-size: 0.85em; text-align: center; }
+            .texture-processed a { color: #8ab4f8; text-decoration: none; transition: color 0.15s; }
+            .texture-processed a:hover { color: #aac9ff; text-decoration: underline; }
             @media (max-width: 1100px) {
                 .site-wrapper { flex-direction: column; align-items: stretch; }
                 .sidebar { width: 100%; position: static; flex-direction: row; }
@@ -228,6 +238,16 @@
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
                 <h2>Информация о проекте</h2>
                 <div class="text-body">Бесплатный архив PBR-текстур высокого разрешения.<br><br>Все материалы доступны для свободного использования в личных и коммерческих проектах.<br></div>
+                
+        <div class="made-with">
+            <div class="made-with-label">Создано при помощи</div>
+            <p class="made-with-text">Этот архив обработан в <strong>Albedolizer</strong> — бесплатном инструменте для проверки, коррекции и генерации PBR-текстур. AI-коррекция цвета, 7 PBR-карт, seamless, экспорт под Unity / Unreal / Godot.</p>
+            <a class="btn-albedolizer" href="https://invisiblelevel.github.io/Albedolizer/" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                Скачать Albedolizer
+            </a>
+        </div>
+    
             </div>
         </div>
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">

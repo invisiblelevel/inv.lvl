@@ -3190,5 +3190,43 @@
       "#blender",
       "#gamedev"
     ]
+  },
+  {
+    "id": 543,
+    "photo_id": 542,
+    "photo": "542_preview.webp",
+    "text": "Wood PBR Texture Pack №22  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/543",
+    "archive_id": 543,
+    "hashtags": [
+      "#wood",
+      "#texture",
+      "#PBR",
+      "#дерево",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 545,
+    "photo_id": 544,
+    "photo": "544_preview.webp",
+    "text": "Wood PBR Texture Pack №23  (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/545",
+    "archive_id": 545,
+    "hashtags": [
+      "#wood",
+      "#texture",
+      "#PBR",
+      "#дерево",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
   }
 ]
