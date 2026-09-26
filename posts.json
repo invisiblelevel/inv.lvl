@@ -3076,5 +3076,81 @@
       "#blender",
       "#gamedev"
     ]
+  },
+  {
+    "id": 531,
+    "photo_id": 530,
+    "photo": "530_preview.webp",
+    "text": "Leather PBR Texture Pack №8 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/531",
+    "archive_id": 531,
+    "hashtags": [
+      "#leather",
+      "#texture",
+      "#PBR",
+      "#кожа",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 533,
+    "photo_id": 532,
+    "photo": "532_preview.webp",
+    "text": "Leather PBR Texture Pack №9 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/533",
+    "archive_id": 533,
+    "hashtags": [
+      "#leather",
+      "#texture",
+      "#PBR",
+      "#кожа",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 535,
+    "photo_id": 534,
+    "photo": "534_preview.webp",
+    "text": "Stone** PBR Texture Pack №1 (8K Resolution, tileable)**",
+    "archive_link": "https://t.me/invlvl/535",
+    "archive_id": 535,
+    "hashtags": [
+      "#stone",
+      "#texture",
+      "#PBR",
+      "#камень",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 537,
+    "photo_id": 536,
+    "photo": "536_preview.webp",
+    "text": "**Stone PBR Texture Pack №2 (8K Resolution, tileable)**",
+    "archive_link": "https://t.me/invlvl/537",
+    "archive_id": 537,
+    "hashtags": [
+      "#stone",
+      "#texture",
+      "#PBR",
+      "#камень",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
   }
 ]
