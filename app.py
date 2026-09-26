@@ -574,6 +574,16 @@ def build_common_css():
             .texture-page .btn-download:hover { background: #5a7fb5; }
             .texture-page .btn-back { display: inline-block; background: #333; color: #fff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 1.1em; transition: background 0.2s; }
             .texture-page .btn-back:hover { background: #444; }
+            .made-with { margin-top: 28px; padding-top: 22px; border-top: 1px solid #333; }
+            .made-with-label { color: #888; font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+            .made-with-text { color: #aaa; font-size: 0.95em; line-height: 1.6; margin: 0 0 14px 0; }
+            .made-with-text strong { color: #fff; }
+            .btn-albedolizer { display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(135deg, #4a6fa5, #6a8fc5); color: #fff; padding: 11px 22px; border-radius: 8px; text-decoration: none; font-size: 0.95em; font-weight: 600; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(74, 111, 165, 0.3); }
+            .btn-albedolizer:hover { background: linear-gradient(135deg, #5a7fb5, #7a9fd5); box-shadow: 0 4px 12px rgba(74, 111, 165, 0.5); transform: translateY(-1px); }
+            .btn-albedolizer svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+            .texture-processed { margin-top: 32px; padding-top: 18px; border-top: 1px solid #2a2a2a; color: #777; font-size: 0.85em; text-align: center; }
+            .texture-processed a { color: #8ab4f8; text-decoration: none; transition: color 0.15s; }
+            .texture-processed a:hover { color: #aac9ff; text-decoration: underline; }
             @media (max-width: 1100px) {
                 .site-wrapper { flex-direction: column; align-items: stretch; }
                 .sidebar { width: 100%; position: static; flex-direction: row; }
@@ -615,12 +625,44 @@ def build_common_modals(lang='ru'):
     donate_filename = 'Donate_EN.txt' if lang == 'en' else 'Donate.txt'
     modal_donate_p = format_text_for_html(load_text_file(donate_filename))
 
+    # ─── Блок "Made with Albedolizer" ───
+    if lang == 'en':
+        made_with_label = "Made with"
+        made_with_text = (
+            "This archive was processed with <strong>Albedolizer</strong> — "
+            "a free tool for checking, correcting, and generating PBR textures. "
+            "AI color correction, 7 PBR maps, seamless, engine export for "
+            "Unity / Unreal / Godot."
+        )
+        made_with_btn = "Download Albedolizer"
+    else:
+        made_with_label = "Создано при помощи"
+        made_with_text = (
+            "Этот архив обработан в <strong>Albedolizer</strong> — "
+            "бесплатном инструменте для проверки, коррекции и генерации PBR-текстур. "
+            "AI-коррекция цвета, 7 PBR-карт, seamless, экспорт под "
+            "Unity / Unreal / Godot."
+        )
+        made_with_btn = "Скачать Albedolizer"
+
+    made_with_block = f'''
+        <div class="made-with">
+            <div class="made-with-label">{made_with_label}</div>
+            <p class="made-with-text">{made_with_text}</p>
+            <a class="btn-albedolizer" href="https://invisiblelevel.github.io/Albedolizer/" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                {made_with_btn}
+            </a>
+        </div>
+    '''
+
     return f'''
         <div id="infoModal" class="modal" onclick="closeModal(event, 'infoModal')">
             <div class="modal-content">
                 <span class="close" onclick="closeModalDirect('infoModal')">&times;</span>
                 <h2>{modal_info_h}</h2>
                 <div class="text-body">{modal_info_p}</div>
+                {made_with_block}
             </div>
         </div>
         <div id="donateModal" class="modal" onclick="closeModal(event, 'donateModal')">
@@ -792,6 +834,9 @@ def generate_texture_page(post, category_posts, lang='ru'):
             <div class="buttons">
                 {download_btn}
                 <a class="btn-back" href="{cat_link}">{btn_back_text}</a>
+            </div>
+            <div class="texture-processed">
+                {'Processed with' if lang == 'en' else 'Обработано в'} <a href="https://invisiblelevel.github.io/Albedolizer/" target="_blank" rel="noopener">Albedolizer</a> — {'free PBR tool' if lang == 'en' else 'бесплатный инструмент для PBR-текстур'}
             </div>
         </div>
         {modals}
