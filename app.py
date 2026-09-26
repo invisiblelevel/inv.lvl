@@ -631,8 +631,6 @@ def build_common_modals(lang='ru'):
         made_with_text = (
             "This archive was processed with <strong>Albedolizer</strong> — "
             "a free tool for checking, correcting, and generating PBR textures. "
-            "AI color correction, 7 PBR maps, seamless, engine export for "
-            "Unity / Unreal / Godot."
         )
         made_with_btn = "Download Albedolizer"
     else:
@@ -640,8 +638,6 @@ def build_common_modals(lang='ru'):
         made_with_text = (
             "Этот архив обработан в <strong>Albedolizer</strong> — "
             "бесплатном инструменте для проверки, коррекции и генерации PBR-текстур. "
-            "AI-коррекция цвета, 7 PBR-карт, seamless, экспорт под "
-            "Unity / Unreal / Godot."
         )
         made_with_btn = "Скачать Albedolizer"
 
