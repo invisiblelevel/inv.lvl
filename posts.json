@@ -3228,5 +3228,84 @@
       "#blender",
       "#gamedev"
     ]
+  },
+  {
+    "id": 547,
+    "photo_id": 546,
+    "photo": "546_preview.webp",
+    "text": "Old Tile PBR Texture Pack №3 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/547",
+    "archive_id": 547,
+    "hashtags": [
+      "#tile",
+      "#texture",
+      "#PBR",
+      "#плитка",
+      "#8ktexture",
+      "#unrealengine",
+      "#unity",
+      "#godot",
+      "#blender"
+    ]
+  },
+  {
+    "id": 549,
+    "photo_id": 548,
+    "photo": "548_preview.webp",
+    "text": "Old Tile PBR Texture Pack №4 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/549",
+    "archive_id": 549,
+    "hashtags": [
+      "#tile",
+      "#texture",
+      "#PBR",
+      "#плитка",
+      "#8ktexture",
+      "#unrealengine",
+      "#unity",
+      "#godot",
+      "#blender"
+    ]
+  },
+  {
+    "id": 551,
+    "photo_id": 550,
+    "photo": "550_preview.webp",
+    "text": "Mud PBR Texture Pack #1 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/551",
+    "archive_id": 551,
+    "hashtags": [
+      "#terrain",
+      "#mud",
+      "#texture",
+      "#PBR",
+      "#ground",
+      "#земля",
+      "#грязь",
+      "#unrealengine",
+      "#unity",
+      "#godot",
+      "#blender"
+    ]
+  },
+  {
+    "id": 553,
+    "photo_id": 552,
+    "photo": "552_preview.webp",
+    "text": "Snow PBR Texture Pack #1 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/553",
+    "archive_id": 553,
+    "hashtags": [
+      "#terrain",
+      "#snow",
+      "#texture",
+      "#PBR",
+      "#ground",
+      "#снег",
+      "#unrealengine",
+      "#unity",
+      "#godot",
+      "#blender"
+    ]
   }
 ]
