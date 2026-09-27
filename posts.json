@@ -3307,5 +3307,104 @@
       "#godot",
       "#blender"
     ]
+  },
+  {
+    "id": 555,
+    "photo_id": 554,
+    "photo": "554_preview.webp",
+    "text": "Stone Granite PBR Texture Pack №1 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/555",
+    "archive_id": 555,
+    "hashtags": [
+      "#stone",
+      "#texture",
+      "#PBR",
+      "#камень",
+      "#гранит",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 557,
+    "photo_id": 556,
+    "photo": "556_preview.webp",
+    "text": "Stone Granite PBR Texture Pack №2 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/557",
+    "archive_id": 557,
+    "hashtags": [
+      "#stone",
+      "#texture",
+      "#PBR",
+      "#камень",
+      "#гранит",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 559,
+    "photo_id": 558,
+    "photo": "558_preview.webp",
+    "text": "Roof Tiles PBR Texture Pack №1 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/559",
+    "archive_id": 559,
+    "hashtags": [
+      "#other",
+      "#texture",
+      "#PBR",
+      "#rooftiles",
+      "#черепица",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 561,
+    "photo_id": 560,
+    "photo": "560_preview.webp",
+    "text": "Roof Tiles PBR Texture Pack №2 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/561",
+    "archive_id": 561,
+    "hashtags": [
+      "#other",
+      "#texture",
+      "#PBR",
+      "#rooftiles",
+      "#черепица",
+      "#8ktextures",
+      "#unrealengine",
+      "#unity",
+      "#blender",
+      "#gamedev"
+    ]
+  },
+  {
+    "id": 563,
+    "photo_id": 562,
+    "photo": "562_preview.webp",
+    "text": "Terrain PBR Texture Pack #15 (8K Resolution, tileable)",
+    "archive_link": "https://t.me/invlvl/563",
+    "archive_id": 563,
+    "hashtags": [
+      "#terrain",
+      "#gravel",
+      "#texture",
+      "#PBR",
+      "#ground",
+      "#земля",
+      "#unrealengine",
+      "#unity",
+      "#godot"
+    ]
   }
 ]
