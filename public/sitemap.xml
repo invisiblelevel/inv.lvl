@@ -3145,6 +3145,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//texture_599.html</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://invisiblelevel.github.io/inv.lvl//texture_599_en.html</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://invisiblelevel.github.io/inv.lvl//tile.html</loc>
     <lastmod>2026-10-06</lastmod>
     <changefreq>weekly</changefreq>
